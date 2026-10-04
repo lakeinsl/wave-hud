@@ -161,3 +161,217 @@ nav{height:74px;position:absolute;z-index:5;left:0;right:0;bottom:0;display:grid
     padding-right: 4px;
   }
 }
+/* ========================================
+   WAVE ACTIVITY — FINAL ROW LAYOUT FIX
+   ======================================== */
+
+.waveActivity {
+  margin: 0 30px;
+}
+
+.waveRow {
+  width: 100%;
+  min-height: 82px;
+
+  display: grid;
+  grid-template-columns: 42px 52px minmax(0, 1fr) 120px 20px;
+  align-items: center;
+  gap: 12px;
+
+  padding: 0 16px;
+
+  border: 1px solid #16425e;
+  border-left: 3px solid #1879a6;
+
+  background:
+    linear-gradient(100deg, #071824, #030a10);
+
+  color: #effaff;
+}
+
+.waveNumber {
+  font-size: 9px;
+  color: #4f7f98;
+  text-align: center;
+}
+
+.waveOrb {
+  width: 38px;
+  height: 38px;
+
+  display: grid;
+  place-items: center;
+
+  border: 1px solid #258db8;
+  border-radius: 50%;
+
+  color: #3fcfff;
+  background: #04101a;
+
+  font-size: 16px;
+}
+
+.waveInfo {
+  min-width: 0;
+  overflow: hidden;
+}
+
+.waveInfo b {
+  display: block;
+
+  color: #effaff;
+
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 2px;
+
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.waveInfo small {
+  display: block;
+
+  margin-top: 5px;
+
+  color: #5d7f93;
+  font-size: 8px;
+  letter-spacing: 1px;
+
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.waveDirection {
+  min-width: 100px;
+  text-align: right;
+}
+
+.waveDirection small {
+  display: block;
+
+  color: #527f95;
+  font-size: 7px;
+  letter-spacing: 2px;
+}
+
+.waveDirection b {
+  display: block;
+
+  margin-top: 5px;
+
+  color: #55ceff;
+  font-size: 10px;
+  letter-spacing: 2px;
+}
+
+.waveArrow {
+  color: #43bdf2;
+  text-align: right;
+  font-size: 18px;
+}
+
+/* WAVE TAB BUTTONS */
+
+.waveTabs {
+  display: flex;
+  gap: 10px;
+
+  margin: 0 30px 16px;
+  padding-bottom: 16px;
+
+  border-bottom: 1px solid #123c55;
+}
+
+.waveTabs button {
+  min-width: 130px;
+  height: 42px;
+
+  padding: 0 16px;
+
+  border: 1px solid #174660;
+  background: #04101a;
+
+  color: #6a9ab1;
+
+  font-size: 9px;
+  letter-spacing: 3px;
+
+  cursor: pointer;
+}
+
+.waveTabs button span {
+  display: inline-grid;
+  place-items: center;
+
+  min-width: 24px;
+  height: 24px;
+
+  margin-left: 10px;
+
+  border: 1px solid #1e6687;
+
+  color: #74ddff;
+
+  font-size: 9px;
+  letter-spacing: 0;
+}
+
+.waveTabs button.active {
+  border-color: #38cfff;
+  color: #8ceaff;
+
+  box-shadow:
+    inset 0 -3px #38cfff,
+    0 0 14px #00aaff12;
+}
+
+.waveTabs button:hover {
+  border-color: #38cfff;
+  color: #8ceaff;
+}
+
+/* EMPTY WAVES STATE */
+
+#waveActivity .noSignals {
+  width: 100%;
+  min-height: 100px;
+
+  display: grid;
+  place-items: center;
+
+  border: 1px solid #123c55;
+
+  background:
+    linear-gradient(100deg, #06141e, #02090e);
+
+  color: #527f95;
+
+  font-size: 9px;
+  letter-spacing: 3px;
+}
+
+/* SL MEDIA / SMALL VIEW SAFETY */
+
+@media (max-width: 700px) {
+  .waveActivity {
+    margin: 0 14px;
+  }
+
+  .waveTabs {
+    margin-left: 14px;
+    margin-right: 14px;
+  }
+
+  .waveRow {
+    grid-template-columns: 30px 42px minmax(0, 1fr) 90px 14px;
+    gap: 8px;
+    padding: 0 9px;
+  }
+
+  .waveDirection {
+    min-width: 0;
+  }
+}
