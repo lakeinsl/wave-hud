@@ -393,6 +393,7 @@ function drawWaveActivity() {
   activityEl.appendChild(row);
 });
 }
+
 const incomingTab =
   document.querySelector("#incomingTab");
 
