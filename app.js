@@ -1,4 +1,3 @@
-alert("WAVE JS V11 LOADED");
 const WAVE_API =
   "https://aydjbummeaqibzezjtfq.supabase.co/functions/v1/wave-nearby";
 const WAVE_SEND_API =
@@ -293,7 +292,7 @@ async function loadWaveActivity() {
 
     if (!response.ok || !data.ok) {
       throw new Error(
-        data.error || `HTTP ${response.status}`
+        data.error || `HTTP ${response.status}`,
       );
     }
 
@@ -305,13 +304,8 @@ async function loadWaveActivity() {
       ? data.sent
       : [];
 
-    if (incomingCountEl) {
-      incomingCountEl.textContent = waveIncoming.length;
-    }
-
-    if (sentCountEl) {
-      sentCountEl.textContent = waveSent.length;
-    }
+    incomingCountEl.textContent = waveIncoming.length;
+    sentCountEl.textContent = waveSent.length;
 
     drawWaveActivity();
   } catch (error) {
@@ -350,44 +344,34 @@ function drawWaveActivity() {
     return;
   }
 
-  list.forEach((wave, index) => {
+  list.forEach((wave) => {
     const row = document.createElement("div");
     row.className = "waveRow";
 
-    const displayName =
-      wave.other_display_name ||
-      "UNKNOWN SIGNAL";
-
-    const username =
-      wave.other_username || "";
-
-    const status =
-      String(wave.status || "sent").toUpperCase();
+    const otherUUID =
+      waveView === "incoming"
+        ? wave.sender_uuid
+        : wave.receiver_uuid;
 
     row.innerHTML = `
-      <div class="waveNumber">
-        ${String(index + 1).padStart(2, "0")}
-      </div>
-
       <div class="waveOrb">◉</div>
 
       <div class="waveInfo">
-        <b>${escapeHTML(displayName)}</b>
-        <small>${escapeHTML(username)}</small>
-      </div>
-
-      <div class="waveDirection">
-        <small>
+        <b>
           ${
             waveView === "incoming"
-              ? "RECEIVED"
-              : "SENT"
+              ? "INCOMING SIGNAL"
+              : "OUTGOING SIGNAL"
           }
-        </small>
-        <b>${escapeHTML(status)}</b>
+        </b>
+        <small>${escapeHTML(otherUUID)}</small>
       </div>
 
-      <div class="waveArrow">›</div>
+      <div class="waveStatus">
+        ${escapeHTML(
+          String(wave.status || "sent").toUpperCase()
+        )}
+      </div>
     `;
 
     activityEl.appendChild(row);
@@ -408,10 +392,7 @@ if (incomingTab) {
     waveView = "incoming";
 
     incomingTab.classList.add("active");
-
-    if (sentTab) {
-      sentTab.classList.remove("active");
-    }
+    sentTab.classList.remove("active");
 
     drawWaveActivity();
   };
@@ -422,10 +403,7 @@ if (sentTab) {
     waveView = "sent";
 
     sentTab.classList.add("active");
-
-    if (incomingTab) {
-      incomingTab.classList.remove("active");
-    }
+    incomingTab.classList.remove("active");
 
     drawWaveActivity();
   };
@@ -436,8 +414,5 @@ if (refreshWaves) {
     loadWaveActivity();
   };
 }
-
-// Initial HUD load
+// Load the latest real Second Life scan when WAVE opens.
 loadNearby();
-
-console.log("WAVE APP LOADED");
