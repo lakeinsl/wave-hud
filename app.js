@@ -2,6 +2,8 @@ const WAVE_API =
   "https://aydjbummeaqibzezjtfq.supabase.co/functions/v1/wave-nearby";
 const WAVE_SEND_API =
   "https://aydjbummeaqibzezjtfq.supabase.co/functions/v1/wave-send";
+const WAVE_ACTIVITY_API =
+  "https://aydjbummeaqibzezjtfq.supabase.co/functions/v1/wave-activity";
 const HUD_ID = "283047e0-f1ec-cd41-314e-24bf2f069c68";
 const OWNER_UUID = "2274de21-ee93-45e5-bce9-fab2c1fc644e";
 
