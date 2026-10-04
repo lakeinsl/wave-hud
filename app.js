@@ -304,8 +304,13 @@ async function loadWaveActivity() {
       ? data.sent
       : [];
 
-    incomingCountEl.textContent = waveIncoming.length;
-    sentCountEl.textContent = waveSent.length;
+if (incomingCountEl) {
+  incomingCountEl.textContent = waveIncoming.length;
+}
+
+if (sentCountEl) {
+  sentCountEl.textContent = waveSent.length;
+}
 
     drawWaveActivity();
   } catch (error) {
