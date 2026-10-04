@@ -367,10 +367,14 @@ function drawWaveActivity() {
 
       <div class="waveOrb">◉</div>
 
-      <div class="waveInfo">
-        <b>${escapeHTML(displayName)}</b>
-        <small>${escapeHTML(username)}</small>
-      </div>
+     <div class="waveInfo">
+  <b>${escapeHTML(displayName)}</b>
+  ${
+    username
+      ? `<small>@${escapeHTML(username)}</small>`
+      : ""
+  }
+</div>
 
       <div class="waveDirection">
         <small>
