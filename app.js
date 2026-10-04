@@ -273,7 +273,7 @@ async function loadWaveActivity() {
 
   activityEl.innerHTML = `
     <div class="noSignals">
-      LOADING SIGNAL ACTIVITY...
+      STEP 1 // STARTING REQUEST...
     </div>
   `;
 
@@ -288,12 +288,42 @@ async function loadWaveActivity() {
       }),
     });
 
-    const data = await response.json();
+    activityEl.innerHTML = `
+      <div class="noSignals">
+        STEP 2 // SERVER RESPONDED // HTTP ${response.status}
+      </div>
+    `;
+
+    const raw = await response.text();
+
+    activityEl.innerHTML = `
+      <div class="noSignals">
+        STEP 3 // RESPONSE RECEIVED
+      </div>
+    `;
+
+    let data;
+
+    try {
+      data = JSON.parse(raw);
+    } catch (parseError) {
+      activityEl.innerHTML = `
+        <div class="noSignals">
+          JSON ERROR // ${escapeHTML(raw)}
+        </div>
+      `;
+      return;
+    }
 
     if (!response.ok || !data.ok) {
-      throw new Error(
-        data.error || `HTTP ${response.status}`,
-      );
+      activityEl.innerHTML = `
+        <div class="noSignals">
+          API ERROR // ${escapeHTML(
+            data.error || `HTTP ${response.status}`
+          )}
+        </div>
+      `;
+      return;
     }
 
     waveIncoming = Array.isArray(data.incoming)
@@ -304,27 +334,36 @@ async function loadWaveActivity() {
       ? data.sent
       : [];
 
-if (incomingCountEl) {
-  incomingCountEl.textContent = waveIncoming.length;
-}
+    if (incomingCountEl) {
+      incomingCountEl.textContent = waveIncoming.length;
+    }
 
-if (sentCountEl) {
-  sentCountEl.textContent = waveSent.length;
-}
+    if (sentCountEl) {
+      sentCountEl.textContent = waveSent.length;
+    }
+
+    activityEl.innerHTML = `
+      <div class="noSignals">
+        STEP 4 // DATA OK // INCOMING ${waveIncoming.length} // SENT ${waveSent.length}
+      </div>
+    `;
 
     drawWaveActivity();
+
   } catch (error) {
     console.error("WAVE activity request failed:", error);
 
     activityEl.innerHTML = `
       <div class="noSignals">
-        NETWORK ERROR // ACTIVITY UNAVAILABLE
+        FETCH ERROR // ${escapeHTML(
+          error instanceof Error
+            ? error.message
+            : String(error)
+        )}
       </div>
     `;
   }
 }
-
-function drawWaveActivity() {
   const activityEl = document.querySelector("#waveActivity");
 
   if (!activityEl) return;
