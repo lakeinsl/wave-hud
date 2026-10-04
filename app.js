@@ -273,7 +273,7 @@ async function loadWaveActivity() {
 
   activityEl.innerHTML = `
     <div class="noSignals">
-      STEP 1 // STARTING REQUEST...
+      LOADING SIGNAL ACTIVITY...
     </div>
   `;
 
@@ -288,42 +288,12 @@ async function loadWaveActivity() {
       }),
     });
 
-    activityEl.innerHTML = `
-      <div class="noSignals">
-        STEP 2 // SERVER RESPONDED // HTTP ${response.status}
-      </div>
-    `;
-
-    const raw = await response.text();
-
-    activityEl.innerHTML = `
-      <div class="noSignals">
-        STEP 3 // RESPONSE RECEIVED
-      </div>
-    `;
-
-    let data;
-
-    try {
-      data = JSON.parse(raw);
-    } catch (parseError) {
-      activityEl.innerHTML = `
-        <div class="noSignals">
-          JSON ERROR // ${escapeHTML(raw)}
-        </div>
-      `;
-      return;
-    }
+    const data = await response.json();
 
     if (!response.ok || !data.ok) {
-      activityEl.innerHTML = `
-        <div class="noSignals">
-          API ERROR // ${escapeHTML(
-            data.error || `HTTP ${response.status}`
-          )}
-        </div>
-      `;
-      return;
+      throw new Error(
+        data.error || `HTTP ${response.status}`
+      );
     }
 
     waveIncoming = Array.isArray(data.incoming)
@@ -342,31 +312,20 @@ async function loadWaveActivity() {
       sentCountEl.textContent = waveSent.length;
     }
 
-    activityEl.innerHTML = `
-      <div class="noSignals">
-        STEP 4 // DATA OK // INCOMING ${waveIncoming.length} // SENT ${waveSent.length}
-      </div>
-    `;
-
     drawWaveActivity();
-
   } catch (error) {
     console.error("WAVE activity request failed:", error);
 
     activityEl.innerHTML = `
       <div class="noSignals">
-        FETCH ERROR // ${escapeHTML(
-          error instanceof Error
-            ? error.message
-            : String(error)
-        )}
+        NETWORK ERROR // ACTIVITY UNAVAILABLE
       </div>
     `;
   }
 }
-  function drawWaveActivity() {
-  const activityEl =
-    document.querySelector("#waveActivity");
+
+function drawWaveActivity() {
+  const activityEl = document.querySelector("#waveActivity");
 
   if (!activityEl) return;
 
@@ -402,17 +361,14 @@ async function loadWaveActivity() {
       wave.other_username || "";
 
     const status =
-      String(wave.status || "sent")
-        .toUpperCase();
+      String(wave.status || "sent").toUpperCase();
 
     row.innerHTML = `
       <div class="waveNumber">
         ${String(index + 1).padStart(2, "0")}
       </div>
 
-      <div class="waveOrb">
-        ◉
-      </div>
+      <div class="waveOrb">◉</div>
 
       <div class="waveInfo">
         <b>${escapeHTML(displayName)}</b>
@@ -427,13 +383,10 @@ async function loadWaveActivity() {
               : "SENT"
           }
         </small>
-
         <b>${escapeHTML(status)}</b>
       </div>
 
-      <div class="waveArrow">
-        ›
-      </div>
+      <div class="waveArrow">›</div>
     `;
 
     activityEl.appendChild(row);
@@ -454,7 +407,10 @@ if (incomingTab) {
     waveView = "incoming";
 
     incomingTab.classList.add("active");
-    sentTab.classList.remove("active");
+
+    if (sentTab) {
+      sentTab.classList.remove("active");
+    }
 
     drawWaveActivity();
   };
@@ -465,7 +421,10 @@ if (sentTab) {
     waveView = "sent";
 
     sentTab.classList.add("active");
-    incomingTab.classList.remove("active");
+
+    if (incomingTab) {
+      incomingTab.classList.remove("active");
+    }
 
     drawWaveActivity();
   };
@@ -476,8 +435,8 @@ if (refreshWaves) {
     loadWaveActivity();
   };
 }
-// Load the latest real Second Life scan when WAVE opens.
-loadNearby();
-console.log("WAVE APP LOADED");
 
-loadWaveActivity();
+// Initial HUD load
+loadNearby();
+
+console.log("WAVE APP LOADED");
