@@ -1,6 +1,7 @@
 const WAVE_API =
   "https://aydjbummeaqibzezjtfq.supabase.co/functions/v1/wave-nearby";
-
+const WAVE_SEND_API =
+  "https://aydjbummeaqibzezjtfq.supabase.co/functions/v1/wave-send";
 const HUD_ID = "283047e0-f1ec-cd41-314e-24bf2f069c68";
 const OWNER_UUID = "2274de21-ee93-45e5-bce9-fab2c1fc644e";
 
@@ -82,6 +83,8 @@ function openP(p) {
   duEl.textContent = p.username || "";
   ddEl.textContent =
     Number(p.distance_m).toFixed(1) + " M";
+
+  drawer.dataset.avatarUuid = p.avatar_uuid;
 
   resultEl.textContent = "";
 
@@ -170,8 +173,50 @@ document.querySelector("#x").onclick = () =>
 document.querySelector("#pass").onclick = () =>
   drawer.classList.remove("show");
 
-document.querySelector("#send").onclick = () => {
-  resultEl.textContent = "WAVE SENT // SIGNAL OPEN";
+document.querySelector("#send").onclick = async () => {
+  const receiverUUID = drawer.dataset.avatarUuid;
+
+  if (!receiverUUID) {
+    resultEl.textContent = "ERROR // NO SIGNAL SELECTED";
+    return;
+  }
+
+  const sendButton = document.querySelector("#send");
+
+  sendButton.disabled = true;
+  resultEl.textContent = "SENDING WAVE...";
+
+  try {
+    const response = await fetch(WAVE_SEND_API, {
+      method: "POST",
+
+      headers: {
+        "Content-Type": "application/json",
+      },
+
+      body: JSON.stringify({
+        sender_uuid: OWNER_UUID,
+        sender_hud_id: HUD_ID,
+        receiver_uuid: receiverUUID,
+      }),
+    });
+
+    const data = await response.json();
+
+    if (!response.ok || !data.ok) {
+      throw new Error(
+        data.error || `HTTP ${response.status}`,
+      );
+    }
+
+    resultEl.textContent = "WAVE SENT // SIGNAL OPEN";
+  } catch (error) {
+    console.error("WAVE send failed:", error);
+
+    resultEl.textContent = "NETWORK ERROR // WAVE NOT SENT";
+  } finally {
+    sendButton.disabled = false;
+  }
 };
 
 document.querySelector("#prev").onclick = () => {
