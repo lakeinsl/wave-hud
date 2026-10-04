@@ -7,3 +7,157 @@ header{height:76px;padding:0 27px;display:flex;align-items:center;justify-conten
 nav{height:74px;position:absolute;z-index:5;left:0;right:0;bottom:0;display:grid;grid-template-columns:repeat(4,1fr);border-top:1px solid var(--line);background:#02070cf4}nav button{border:0;border-right:1px solid #11364d;background:transparent;color:#52768b;cursor:pointer;font-size:19px}nav button span{display:block;font-size:8px;letter-spacing:4px;margin-top:5px}nav button.on,nav button:hover{color:#84e9ff;background:#061725;box-shadow:inset 0 3px #38cfff}
 #drawer{position:absolute;z-index:9;top:76px;right:-410px;bottom:74px;width:390px;background:linear-gradient(150deg,#071824,#02080d);border-left:1px solid #2a91bd;padding:30px;box-shadow:-18px 0 40px #000a;transition:.28s}#drawer.show{right:0}#x{position:absolute;right:16px;top:12px;border:0;background:none;color:#7195a9;font-size:25px;cursor:pointer}#drawer>small{color:#4e8da8;letter-spacing:4px;font-size:8px}.portrait{width:88px;height:88px;margin:28px auto 18px;border:1px solid #34bde9;border-radius:50%;display:grid;place-items:center;color:#48d6ff;font-size:39px;background:#04121b}#drawer h2{text-align:center;letter-spacing:4px;margin:0}#drawer>p:not(.bio){text-align:center;color:#68899b}.stats{display:grid;grid-template-columns:1fr 1fr;border-top:1px solid #164159;border-bottom:1px solid #164159;margin:25px 0}.stats div{text-align:center;padding:15px}.stats div+div{border-left:1px solid #164159}.stats b{display:block;color:#6ddfff;letter-spacing:2px}.stats small{font-size:7px;letter-spacing:2px;color:#56778a}.bio{color:#7895a4;line-height:1.6;font-size:11px}.bio~button{height:45px;margin-top:9px;border:1px solid #287fa9;background:#061827;color:#82e5ff;letter-spacing:2px;cursor:pointer;width:100%}#pass{background:transparent!important;color:#68899b!important}#result{text-align:center;color:#77e5ff;margin-top:16px;font-size:9px;letter-spacing:3px}.empty{text-align:center;padding-top:180px}.empty h1{font-size:48px;letter-spacing:10px;color:#69dfff;margin:12px}.empty p{color:#66889a;letter-spacing:2px}#toast{display:none;position:absolute;z-index:12;top:92px;left:50%;transform:translateX(-50%);padding:11px 17px;background:#061725;border:1px solid #36c3ee;color:#8ceaff;letter-spacing:3px;font-size:8px}
 @media(max-width:700px){.cards{grid-template-columns:1fr}.radarLine{display:none}.intro h1{font-size:21px}#drawer{width:100%;right:-100%}}
+
+/* ===== WAVE ACTIVITY PANEL ===== */
+
+.waveTabs {
+  margin: 0 30px 14px;
+  display: flex;
+  gap: 8px;
+  border-bottom: 1px solid #123c55;
+  padding-bottom: 12px;
+}
+
+.waveTabs button {
+  border: 1px solid #164b68;
+  background: #04111a;
+  color: #5e8ca3;
+  padding: 10px 16px;
+  font-size: 9px;
+  letter-spacing: 2px;
+  cursor: pointer;
+  transition: .2s;
+}
+
+.waveTabs button:hover {
+  color: #8ceaff;
+  border-color: #38bde8;
+}
+
+.waveTabs button.active {
+  color: #8ceaff;
+  border-color: #38cfff;
+  background: #071c29;
+  box-shadow: inset 0 -2px #38cfff, 0 0 14px #00aaff16;
+}
+
+.waveTabs button span {
+  display: inline-grid;
+  place-items: center;
+  min-width: 20px;
+  height: 18px;
+  margin-left: 7px;
+  padding: 0 5px;
+  border: 1px solid #1e607d;
+  color: #70dcff;
+  font-size: 8px;
+}
+
+.waveActivity {
+  margin: 0 30px;
+  display: grid;
+  gap: 8px;
+}
+
+.waveRow {
+  min-height: 78px;
+  display: grid;
+  grid-template-columns: 42px 48px 1fr 110px 24px;
+  align-items: center;
+  padding: 0 15px;
+  border: 1px solid #16425e;
+  border-left: 3px solid #1879a6;
+  background: linear-gradient(100deg, #071824, #030a10);
+  transition: .2s;
+}
+
+.waveRow:hover {
+  border-color: #4bd6ff;
+  border-left-color: #82eaff;
+  box-shadow: inset 0 0 20px #009dff18;
+  transform: translateY(-1px);
+}
+
+.waveNumber {
+  color: #4f7f98;
+  font-size: 9px;
+  letter-spacing: 1px;
+}
+
+.waveOrb {
+  width: 35px;
+  height: 35px;
+  border: 1px solid #258db8;
+  border-radius: 50%;
+  display: grid;
+  place-items: center;
+  color: #3fcfff;
+  background: #04101a;
+  box-shadow: 0 0 12px #00aaff12;
+}
+
+.waveInfo {
+  min-width: 0;
+}
+
+.waveInfo b {
+  display: block;
+  color: #effaff;
+  font-size: 11px;
+  letter-spacing: 2px;
+}
+
+.waveInfo small {
+  display: block;
+  color: #5d7f93;
+  margin-top: 5px;
+  font-size: 8px;
+  letter-spacing: 1px;
+}
+
+.waveDirection {
+  text-align: right;
+  padding-right: 12px;
+}
+
+.waveDirection small {
+  display: block;
+  color: #4f7f98;
+  font-size: 7px;
+  letter-spacing: 2px;
+  margin-bottom: 5px;
+}
+
+.waveDirection b {
+  color: #55ceff;
+  font-size: 9px;
+  letter-spacing: 2px;
+}
+
+.waveArrow {
+  text-align: right;
+  color: #43bdf2;
+  font-size: 18px;
+}
+
+#waveActivity .noSignals {
+  min-height: 100px;
+  display: grid;
+  place-items: center;
+  border: 1px solid #123c55;
+  background: linear-gradient(100deg, #06141e, #02090e);
+  color: #527f95;
+  font-size: 9px;
+  letter-spacing: 3px;
+}
+
+@media (max-width: 700px) {
+  .waveRow {
+    grid-template-columns: 30px 42px 1fr 80px 16px;
+    padding: 0 9px;
+  }
+
+  .waveDirection {
+    padding-right: 4px;
+  }
+}
