@@ -653,3 +653,66 @@ nav{height:74px;position:absolute;z-index:5;left:0;right:0;bottom:0;display:grid
     min-width: 0;
   }
 }
+/* ========================================
+   WAVE DRAWER — POSITION / STACK FIX
+   ======================================== */
+
+#waveDrawer {
+  position: absolute !important;
+
+  top: 76px !important;
+  right: -410px !important;
+  bottom: 74px !important;
+
+  width: 390px !important;
+
+  z-index: 50 !important;
+
+  display: block !important;
+
+  visibility: visible !important;
+
+  overflow-y: auto;
+
+  background:
+    linear-gradient(150deg, #071824, #02080d);
+
+  border-left: 1px solid #2a91bd;
+
+  box-shadow:
+    -18px 0 40px #000a,
+    inset 0 0 35px #008cff08;
+
+  transition:
+    right .28s ease !important;
+}
+
+#waveDrawer.show {
+  right: 0 !important;
+}
+
+/* Keep navigation underneath the conversation drawer */
+
+nav {
+  z-index: 5 !important;
+}
+
+/* Activity rows are real interactive controls */
+
+.waveRow {
+  position: relative;
+  z-index: 2;
+  cursor: pointer !important;
+  pointer-events: auto !important;
+}
+
+@media (max-width: 700px) {
+  #waveDrawer {
+    width: 100% !important;
+    right: -100% !important;
+  }
+
+  #waveDrawer.show {
+    right: 0 !important;
+  }
+}
