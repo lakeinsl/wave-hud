@@ -344,34 +344,63 @@ function drawWaveActivity() {
     return;
   }
 
-  list.forEach((wave) => {
+  list.forEach((wave, index) => {
     const row = document.createElement("div");
     row.className = "waveRow";
+
+    const displayName =
+      wave.other_display_name ||
+      wave.display_name ||
+      wave.other_name ||
+      "";
+
+    const username =
+      wave.other_username ||
+      wave.username ||
+      "";
 
     const otherUUID =
       waveView === "incoming"
         ? wave.sender_uuid
         : wave.receiver_uuid;
 
+    const name =
+      displayName ||
+      username ||
+      "UNKNOWN SIGNAL";
+
+    const subtitle =
+      username && username !== name
+        ? username
+        : otherUUID;
+
+    const status =
+      String(wave.status || "sent").toUpperCase();
+
     row.innerHTML = `
+      <div class="waveNumber">
+        ${String(index + 1).padStart(2, "0")}
+      </div>
+
       <div class="waveOrb">◉</div>
 
       <div class="waveInfo">
-        <b>
-          ${
-            waveView === "incoming"
-              ? "INCOMING SIGNAL"
-              : "OUTGOING SIGNAL"
-          }
-        </b>
-        <small>${escapeHTML(otherUUID)}</small>
+        <b>${escapeHTML(name)}</b>
+        <small>${escapeHTML(subtitle || "")}</small>
       </div>
 
-      <div class="waveStatus">
-        ${escapeHTML(
-          String(wave.status || "sent").toUpperCase()
-        )}
+      <div class="waveDirection">
+        <small>
+          ${
+            waveView === "incoming"
+              ? "RECEIVED"
+              : "SENT"
+          }
+        </small>
+        <b>${escapeHTML(status)}</b>
       </div>
+
+      <div class="waveArrow">›</div>
     `;
 
     activityEl.appendChild(row);
