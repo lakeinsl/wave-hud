@@ -1,3 +1,4 @@
+alert("WAVE JS V11 LOADED");
 const WAVE_API =
   "https://aydjbummeaqibzezjtfq.supabase.co/functions/v1/wave-nearby";
 const WAVE_SEND_API =
