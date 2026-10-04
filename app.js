@@ -250,16 +250,17 @@ document
         .forEach((q) => q.classList.remove("active"));
 
       document
-  .querySelector("#" + b.dataset.p)
-  .classList.add("active");
+        .querySelector("#" + b.dataset.p)
+        .classList.add("active");
 
-drawer.classList.remove("show");
+      drawer.classList.remove("show");
 
-if (b.dataset.p === "waves") {
-  loadWaveActivity();
-}
+      if (b.dataset.p === "waves") {
+        loadWaveActivity();
+      }
     };
   });
+
 let waveView = "incoming";
 let waveIncoming = [];
 let waveSent = [];
@@ -350,29 +351,11 @@ function drawWaveActivity() {
 
     const displayName =
       wave.other_display_name ||
-      wave.display_name ||
-      wave.other_name ||
-      "";
+      "UNKNOWN SIGNAL";
 
     const username =
       wave.other_username ||
-      wave.username ||
       "";
-
-    const otherUUID =
-      waveView === "incoming"
-        ? wave.sender_uuid
-        : wave.receiver_uuid;
-
-    const name =
-      displayName ||
-      username ||
-      "UNKNOWN SIGNAL";
-
-    const subtitle =
-      username && username !== name
-        ? username
-        : otherUUID;
 
     const status =
       String(wave.status || "sent").toUpperCase();
@@ -385,8 +368,8 @@ function drawWaveActivity() {
       <div class="waveOrb">◉</div>
 
       <div class="waveInfo">
-        <b>${escapeHTML(name)}</b>
-        <small>${escapeHTML(subtitle || "")}</small>
+        <b>${escapeHTML(displayName)}</b>
+        <small>${escapeHTML(username)}</small>
       </div>
 
       <div class="waveDirection">
@@ -443,5 +426,6 @@ if (refreshWaves) {
     loadWaveActivity();
   };
 }
+
 // Load the latest real Second Life scan when WAVE opens.
 loadNearby();
