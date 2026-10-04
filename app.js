@@ -390,7 +390,7 @@ function drawWaveActivity() {
     <div class="waveArrow">›</div>
   `;
 
-  activityEl.appendChild(row);
+   activityEl.appendChild(row);
 });
 }
 
