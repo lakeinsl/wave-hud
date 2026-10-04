@@ -537,8 +537,10 @@ if (waveReplySend) {
     const receiverUUID =
       waveDrawer.dataset.avatarUuid;
 
-    const waveId =
-      waveDrawer.dataset.waveId;
+   const waveId =
+  waveDrawer.dataset.waveId;
+
+console.log("DEBUG SEND waveId:", waveId);
 
     const message =
       waveReplyText.value.trim();
