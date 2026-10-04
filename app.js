@@ -392,11 +392,6 @@ function drawWaveActivity() {
     <div class="waveArrow">›</div>
   `;
 row.onclick = () => {
-  alert(
-    "CLICK WORKS // " +
-    (wave.other_display_name || "UNKNOWN")
-  );
-
   openWaveConversation(wave);
 };
    activityEl.appendChild(row);
@@ -435,12 +430,33 @@ const waveReplyResult =
 
 
 function openWaveConversation(wave) {
-  if (!waveDrawer) return;
+  console.log("OPEN WAVE CONVERSATION:", wave);
+
+  const panel =
+    document.getElementById("waveDrawer");
+
+  if (!panel) {
+    alert("ERROR // waveDrawer NOT FOUND");
+    return;
+  }
+
+  const nameEl =
+    document.getElementById("waveDrawerName");
+
+  const usernameEl =
+    document.getElementById("waveDrawerUsername");
+
+  const statusEl =
+    document.getElementById("waveDrawerStatus");
+
+  const textEl =
+    document.getElementById("waveReplyText");
+
+  const resultEl =
+    document.getElementById("waveReplyResult");
 
   const otherUUID =
-    String(
-      wave.other_avatar_uuid || "",
-    );
+    String(wave.other_avatar_uuid || "");
 
   const displayName =
     wave.other_display_name ||
@@ -450,32 +466,46 @@ function openWaveConversation(wave) {
     wave.other_username || "";
 
   const status =
-    String(
-      wave.status || "sent",
-    ).toUpperCase();
+    String(wave.status || "sent")
+      .toUpperCase();
 
-  waveDrawer.dataset.avatarUuid =
+  panel.dataset.avatarUuid =
     otherUUID;
 
-  waveDrawer.dataset.waveId =
+  panel.dataset.waveId =
     wave.wave_id || "";
 
-  waveDrawerName.textContent =
-    displayName;
+  if (nameEl) {
+    nameEl.textContent =
+      displayName;
+  }
 
-  waveDrawerUsername.textContent =
-    username
-      ? `@${username}`
-      : "";
+  if (usernameEl) {
+    usernameEl.textContent =
+      username
+        ? "@" + username
+        : "";
+  }
 
-  waveDrawerStatus.textContent =
-    status;
+  if (statusEl) {
+    statusEl.textContent =
+      status;
+  }
 
-  waveReplyText.value = "";
+  if (textEl) {
+    textEl.value = "";
+  }
 
-  waveReplyResult.textContent = "";
+  if (resultEl) {
+    resultEl.textContent = "";
+  }
 
-  waveDrawer.classList.add("show");
+  panel.classList.add("show");
+
+  console.log(
+    "WAVE DRAWER OPEN:",
+    panel.className
+  );
 }
 
 
