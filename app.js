@@ -392,6 +392,11 @@ function drawWaveActivity() {
     <div class="waveArrow">›</div>
   `;
 row.onclick = () => {
+  alert(
+    "CLICK WORKS // " +
+    (wave.other_display_name || "UNKNOWN")
+  );
+
   openWaveConversation(wave);
 };
    activityEl.appendChild(row);
