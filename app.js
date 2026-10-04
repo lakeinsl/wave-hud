@@ -416,3 +416,6 @@ if (refreshWaves) {
 }
 // Load the latest real Second Life scan when WAVE opens.
 loadNearby();
+console.log("WAVE APP LOADED");
+
+loadWaveActivity();
