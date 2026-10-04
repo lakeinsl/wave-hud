@@ -250,12 +250,169 @@ document
         .forEach((q) => q.classList.remove("active"));
 
       document
-        .querySelector("#" + b.dataset.p)
-        .classList.add("active");
+  .querySelector("#" + b.dataset.p)
+  .classList.add("active");
 
-      drawer.classList.remove("show");
+drawer.classList.remove("show");
+
+if (b.dataset.p === "waves") {
+  loadWaveActivity();
+}
     };
   });
+let waveView = "incoming";
+let waveIncoming = [];
+let waveSent = [];
 
+async function loadWaveActivity() {
+  const activityEl = document.querySelector("#waveActivity");
+  const incomingCountEl = document.querySelector("#incomingCount");
+  const sentCountEl = document.querySelector("#sentCount");
+
+  if (!activityEl) return;
+
+  activityEl.innerHTML = `
+    <div class="noSignals">
+      LOADING SIGNAL ACTIVITY...
+    </div>
+  `;
+
+  try {
+    const response = await fetch(WAVE_ACTIVITY_API, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        avatar_uuid: OWNER_UUID,
+      }),
+    });
+
+    const data = await response.json();
+
+    if (!response.ok || !data.ok) {
+      throw new Error(
+        data.error || `HTTP ${response.status}`,
+      );
+    }
+
+    waveIncoming = Array.isArray(data.incoming)
+      ? data.incoming
+      : [];
+
+    waveSent = Array.isArray(data.sent)
+      ? data.sent
+      : [];
+
+    incomingCountEl.textContent = waveIncoming.length;
+    sentCountEl.textContent = waveSent.length;
+
+    drawWaveActivity();
+  } catch (error) {
+    console.error("WAVE activity request failed:", error);
+
+    activityEl.innerHTML = `
+      <div class="noSignals">
+        NETWORK ERROR // ACTIVITY UNAVAILABLE
+      </div>
+    `;
+  }
+}
+
+function drawWaveActivity() {
+  const activityEl = document.querySelector("#waveActivity");
+
+  if (!activityEl) return;
+
+  const list =
+    waveView === "incoming"
+      ? waveIncoming
+      : waveSent;
+
+  activityEl.innerHTML = "";
+
+  if (list.length === 0) {
+    activityEl.innerHTML = `
+      <div class="noSignals">
+        ${
+          waveView === "incoming"
+            ? "NO INCOMING WAVES"
+            : "NO SENT WAVES"
+        }
+      </div>
+    `;
+    return;
+  }
+
+  list.forEach((wave) => {
+    const row = document.createElement("div");
+    row.className = "waveRow";
+
+    const otherUUID =
+      waveView === "incoming"
+        ? wave.sender_uuid
+        : wave.receiver_uuid;
+
+    row.innerHTML = `
+      <div class="waveOrb">◉</div>
+
+      <div class="waveInfo">
+        <b>
+          ${
+            waveView === "incoming"
+              ? "INCOMING SIGNAL"
+              : "OUTGOING SIGNAL"
+          }
+        </b>
+        <small>${escapeHTML(otherUUID)}</small>
+      </div>
+
+      <div class="waveStatus">
+        ${escapeHTML(
+          String(wave.status || "sent").toUpperCase()
+        )}
+      </div>
+    `;
+
+    activityEl.appendChild(row);
+  });
+}
+
+const incomingTab =
+  document.querySelector("#incomingTab");
+
+const sentTab =
+  document.querySelector("#sentTab");
+
+const refreshWaves =
+  document.querySelector("#refreshWaves");
+
+if (incomingTab) {
+  incomingTab.onclick = () => {
+    waveView = "incoming";
+
+    incomingTab.classList.add("active");
+    sentTab.classList.remove("active");
+
+    drawWaveActivity();
+  };
+}
+
+if (sentTab) {
+  sentTab.onclick = () => {
+    waveView = "sent";
+
+    sentTab.classList.add("active");
+    incomingTab.classList.remove("active");
+
+    drawWaveActivity();
+  };
+}
+
+if (refreshWaves) {
+  refreshWaves.onclick = () => {
+    loadWaveActivity();
+  };
+}
 // Load the latest real Second Life scan when WAVE opens.
 loadNearby();
