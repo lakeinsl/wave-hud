@@ -8,7 +8,35 @@
  <div class="pager"><button id="prev">‹ PREV</button><span><b id="pn">1</b> / <i id="pt">2</i></span><button id="next">NEXT ›</button></div>
 </section>
 <section id="wave" class="page empty"><small>YOUR SIGNAL</small><h1>WAVE</h1><p>Quick signals and outgoing connections.</p></section>
-<section id="waves" class="page empty"><small>ACTIVITY</small><h1>WAVES</h1><p>Incoming, sent and mutual signals.</p></section>
+<section id="waves" class="page">
+  <div class="intro">
+    <div>
+      <small>SIGNAL ACTIVITY</small>
+      <h1>YOUR <em>WAVES.</em></h1>
+      <p>Incoming and outgoing connections.</p>
+    </div>
+
+    <button id="refreshWaves">↻ REFRESH</button>
+  </div>
+
+  <div class="waveTabs">
+    <button id="incomingTab" class="active">
+      INCOMING
+      <span id="incomingCount">0</span>
+    </button>
+
+    <button id="sentTab">
+      SENT
+      <span id="sentCount">0</span>
+    </button>
+  </div>
+
+  <div id="waveActivity" class="waveActivity">
+    <div class="noSignals">
+      LOADING SIGNAL ACTIVITY...
+    </div>
+  </div>
+</section>
 <section id="more" class="page empty"><small>CONTROL CENTER</small><h1>MORE</h1><p>Privacy, blocks, range and preferences.</p></section>
 <nav><button data-p="wave">⌁<span>WAVE</span></button><button class="on" data-p="scan">◎<span>SCAN</span></button><button data-p="waves">▣<span>WAVES</span></button><button data-p="more">•••<span>MORE</span></button></nav>
 <aside id="drawer"><button id="x">×</button><small>SIGNAL PROFILE</small><div class="portrait">◉</div><h2 id="dn"></h2><p id="du"></p><div class="stats"><div><b id="dd"></b><small>DISTANCE</small></div><div><b>LIVE</b><small>STATUS</small></div></div><p class="bio">This signal is nearby. Send a WAVE to open the connection.</p><button id="send">⌁ SEND WAVE</button><button id="pass">PASS</button><div id="result"></div></aside>
