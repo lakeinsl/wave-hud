@@ -1,0 +1,16 @@
+<!doctype html><html><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>WAVE // Orbit Hybrid</title><link rel="stylesheet" href="style.css"></head>
+<body><main class="hud">
+<header><div class="brand">BLKBOX <i>//</i> <b>WAVE</b><small>SOCIAL SIGNAL SYSTEM</small></div><div class="live"><span></span> NETWORK LIVE</div></header>
+<section id="scan" class="page active">
+ <div class="intro"><div><small>LOCAL SIGNAL FIELD</small><h1>PEOPLE <em>AROUND YOU.</em></h1><p><b id="total">12</b> signals detected within 32 meters.</p></div><button id="rescan">↻ RESCAN</button></div>
+ <div class="radarLine"><div class="radar"><div class="sweep"></div><div class="rings"></div><strong>12</strong><small>NEARBY</small></div><div class="hint"><b>DISCOVERY ACTIVE</b><span>Tap a signal to view profile</span></div></div>
+ <div id="cards" class="cards"></div>
+ <div class="pager"><button id="prev">‹ PREV</button><span><b id="pn">1</b> / <i id="pt">2</i></span><button id="next">NEXT ›</button></div>
+</section>
+<section id="wave" class="page empty"><small>YOUR SIGNAL</small><h1>WAVE</h1><p>Quick signals and outgoing connections.</p></section>
+<section id="waves" class="page empty"><small>ACTIVITY</small><h1>WAVES</h1><p>Incoming, sent and mutual signals.</p></section>
+<section id="more" class="page empty"><small>CONTROL CENTER</small><h1>MORE</h1><p>Privacy, blocks, range and preferences.</p></section>
+<nav><button data-p="wave">⌁<span>WAVE</span></button><button class="on" data-p="scan">◎<span>SCAN</span></button><button data-p="waves">▣<span>WAVES</span></button><button data-p="more">•••<span>MORE</span></button></nav>
+<aside id="drawer"><button id="x">×</button><small>SIGNAL PROFILE</small><div class="portrait">◉</div><h2 id="dn"></h2><p id="du"></p><div class="stats"><div><b id="dd"></b><small>DISTANCE</small></div><div><b>LIVE</b><small>STATUS</small></div></div><p class="bio">This signal is nearby. Send a WAVE to open the connection.</p><button id="send">⌁ SEND WAVE</button><button id="pass">PASS</button><div id="result"></div></aside>
+<div id="toast">PROXIMITY FIELD REFRESHED</div>
+</main><script src="app.js"></script></body></html>
