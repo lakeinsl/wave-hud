@@ -391,11 +391,201 @@ function drawWaveActivity() {
 
     <div class="waveArrow">›</div>
   `;
-
+row.onclick = () => {
+  openWaveConversation(wave);
+};
    activityEl.appendChild(row);
 });
 }
+// =========================================
+// WAVE WEB CONVERSATION
+// =========================================
 
+const waveDrawer =
+  document.querySelector("#waveDrawer");
+
+const waveDrawerClose =
+  document.querySelector("#waveDrawerClose");
+
+const waveDrawerName =
+  document.querySelector("#waveDrawerName");
+
+const waveDrawerUsername =
+  document.querySelector("#waveDrawerUsername");
+
+const waveDrawerStatus =
+  document.querySelector("#waveDrawerStatus");
+
+const waveReplyText =
+  document.querySelector("#waveReplyText");
+
+const waveReplySend =
+  document.querySelector("#waveReplySend");
+
+const waveReplyCancel =
+  document.querySelector("#waveReplyCancel");
+
+const waveReplyResult =
+  document.querySelector("#waveReplyResult");
+
+
+function openWaveConversation(wave) {
+  if (!waveDrawer) return;
+
+  const otherUUID =
+    String(
+      wave.other_avatar_uuid || "",
+    );
+
+  const displayName =
+    wave.other_display_name ||
+    "UNKNOWN SIGNAL";
+
+  const username =
+    wave.other_username || "";
+
+  const status =
+    String(
+      wave.status || "sent",
+    ).toUpperCase();
+
+  waveDrawer.dataset.avatarUuid =
+    otherUUID;
+
+  waveDrawer.dataset.waveId =
+    wave.wave_id || "";
+
+  waveDrawerName.textContent =
+    displayName;
+
+  waveDrawerUsername.textContent =
+    username
+      ? `@${username}`
+      : "";
+
+  waveDrawerStatus.textContent =
+    status;
+
+  waveReplyText.value = "";
+
+  waveReplyResult.textContent = "";
+
+  waveDrawer.classList.add("show");
+}
+
+
+function closeWaveConversation() {
+  if (!waveDrawer) return;
+
+  waveDrawer.classList.remove("show");
+
+  waveReplyText.value = "";
+
+  waveReplyResult.textContent = "";
+}
+
+
+if (waveDrawerClose) {
+  waveDrawerClose.onclick =
+    closeWaveConversation;
+}
+
+
+if (waveReplyCancel) {
+  waveReplyCancel.onclick =
+    closeWaveConversation;
+}
+
+
+if (waveReplySend) {
+  waveReplySend.onclick = async () => {
+    const receiverUUID =
+      waveDrawer.dataset.avatarUuid;
+
+    const waveId =
+      waveDrawer.dataset.waveId;
+
+    const message =
+      waveReplyText.value.trim();
+
+    if (!receiverUUID) {
+      waveReplyResult.textContent =
+        "ERROR // NO SIGNAL SELECTED";
+
+      return;
+    }
+
+    if (!message) {
+      waveReplyResult.textContent =
+        "ENTER A MESSAGE";
+
+      waveReplyText.focus();
+
+      return;
+    }
+
+    waveReplySend.disabled = true;
+
+    waveReplyResult.textContent =
+      "TRANSMITTING MESSAGE...";
+
+    try {
+      const response =
+        await fetch(
+          WAVE_MESSAGE_SEND_API,
+          {
+            method: "POST",
+
+            headers: {
+              "Content-Type":
+                "application/json",
+            },
+
+            body: JSON.stringify({
+              sender_uuid:
+                OWNER_UUID,
+
+              receiver_uuid:
+                receiverUUID,
+
+              wave_id:
+                waveId,
+
+              message:
+                message,
+            }),
+          },
+        );
+
+      const data =
+        await response.json();
+
+      if (!response.ok || !data.ok) {
+        throw new Error(
+          data.error ||
+          `HTTP ${response.status}`,
+        );
+      }
+
+      waveReplyText.value = "";
+
+      waveReplyResult.textContent =
+        "MESSAGE SENT // SIGNAL DELIVERING";
+
+    } catch (error) {
+      console.error(
+        "WAVE message send failed:",
+        error,
+      );
+
+      waveReplyResult.textContent =
+        "NETWORK ERROR // MESSAGE NOT SENT";
+
+    } finally {
+      waveReplySend.disabled = false;
+    }
+  };
+}
 const incomingTab =
   document.querySelector("#incomingTab");
 
