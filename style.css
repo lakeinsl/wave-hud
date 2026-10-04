@@ -372,6 +372,284 @@ nav{height:74px;position:absolute;z-index:5;left:0;right:0;bottom:0;display:grid
   }
 
   .waveDirection {
+    /* ========================================
+   WAVE WEB MESSAGE DRAWER
+   ======================================== */
+
+#waveDrawer {
+  position: absolute;
+  z-index: 10;
+
+  top: 76px;
+  right: -410px;
+  bottom: 74px;
+
+  width: 390px;
+
+  padding: 30px;
+
+  overflow-y: auto;
+
+  background:
+    linear-gradient(150deg, #071824, #02080d);
+
+  border-left: 1px solid #2a91bd;
+
+  box-shadow:
+    -18px 0 40px #000a,
+    inset 0 0 35px #008cff08;
+
+  transition: right .28s ease;
+}
+
+#waveDrawer.show {
+  right: 0;
+}
+
+#waveDrawerClose {
+  position: absolute;
+
+  right: 16px;
+  top: 12px;
+
+  border: 0;
+  background: none;
+
+  color: #7195a9;
+
+  font-size: 25px;
+
+  cursor: pointer;
+}
+
+#waveDrawerClose:hover {
+  color: #8ceaff;
+}
+
+#waveDrawer > small {
+  color: #4e8da8;
+
+  letter-spacing: 4px;
+
+  font-size: 8px;
+}
+
+#waveDrawer .portrait {
+  width: 88px;
+  height: 88px;
+
+  margin: 28px auto 18px;
+
+  border: 1px solid #34bde9;
+  border-radius: 50%;
+
+  display: grid;
+  place-items: center;
+
+  color: #48d6ff;
+
+  font-size: 39px;
+
+  background: #04121b;
+
+  box-shadow: 0 0 20px #00aaff12;
+}
+
+#waveDrawer h2 {
+  margin: 0;
+
+  text-align: center;
+
+  color: #effaff;
+
+  letter-spacing: 4px;
+}
+
+#waveDrawer > p:not(.bio) {
+  text-align: center;
+
+  color: #68899b;
+}
+
+#waveDrawer .stats {
+  display: grid;
+
+  grid-template-columns:
+    1fr 1fr;
+
+  margin: 25px 0;
+
+  border-top: 1px solid #164159;
+  border-bottom: 1px solid #164159;
+}
+
+#waveDrawer .stats div {
+  padding: 15px;
+
+  text-align: center;
+}
+
+#waveDrawer .stats div + div {
+  border-left: 1px solid #164159;
+}
+
+#waveDrawer .stats b {
+  display: block;
+
+  color: #6ddfff;
+
+  letter-spacing: 2px;
+}
+
+#waveDrawer .stats small {
+  color: #56778a;
+
+  font-size: 7px;
+
+  letter-spacing: 2px;
+}
+
+#waveDrawer .bio {
+  color: #7895a4;
+
+  line-height: 1.6;
+
+  font-size: 11px;
+}
+
+/* MESSAGE INPUT */
+
+#waveReplyText {
+  width: 100%;
+  min-height: 115px;
+
+  margin-top: 12px;
+
+  padding: 14px;
+
+  resize: vertical;
+
+  outline: none;
+
+  border: 1px solid #174660;
+
+  background: #020a10;
+
+  color: #effaff;
+
+  font-family: Arial, sans-serif;
+
+  font-size: 11px;
+
+  line-height: 1.5;
+
+  letter-spacing: 1px;
+
+  transition: .2s;
+}
+
+#waveReplyText::placeholder {
+  color: #45697c;
+
+  letter-spacing: 2px;
+
+  font-size: 9px;
+}
+
+#waveReplyText:focus {
+  border-color: #38cfff;
+
+  box-shadow:
+    0 0 15px #00aaff15,
+    inset 0 0 15px #00aaff08;
+}
+
+/* SEND + CANCEL */
+
+#waveReplySend,
+#waveReplyCancel {
+  width: 100%;
+  height: 45px;
+
+  margin-top: 9px;
+
+  border: 1px solid #287fa9;
+
+  background: #061827;
+
+  color: #82e5ff;
+
+  letter-spacing: 2px;
+
+  cursor: pointer;
+}
+
+#waveReplySend:hover {
+  border-color: #54dfff;
+
+  background: #082235;
+
+  box-shadow:
+    inset 0 0 18px #00aaff14;
+}
+
+#waveReplySend:disabled {
+  opacity: .45;
+
+  cursor: not-allowed;
+}
+
+#waveReplyCancel {
+  background: transparent;
+
+  color: #68899b;
+
+  border-color: #174660;
+}
+
+#waveReplyCancel:hover {
+  color: #8ceaff;
+
+  border-color: #287fa9;
+}
+
+/* RESULT MESSAGE */
+
+#waveReplyResult {
+  min-height: 18px;
+
+  margin-top: 16px;
+
+  text-align: center;
+
+  color: #77e5ff;
+
+  font-size: 9px;
+
+  letter-spacing: 2px;
+
+  line-height: 1.5;
+}
+
+/* Make WAVE activity rows obviously clickable */
+
+.waveRow {
+  cursor: pointer;
+}
+
+/* SMALL VIEW / SL MEDIA */
+
+@media (max-width: 700px) {
+  #waveDrawer {
+    width: 100%;
+
+    right: -100%;
+  }
+
+  #waveDrawer.show {
+    right: 0;
+  }
+}
     min-width: 0;
   }
 }
