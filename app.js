@@ -761,7 +761,7 @@ async function loadWaveMessageHistory() {
     `;
   }
 }
-}
+
 
 function closeWaveConversation() {
   if (!waveDrawer) return;
