@@ -748,8 +748,10 @@ if (
       historyEl.appendChild(row);
     });
 
+    requestAnimationFrame(() => {
     historyEl.scrollTop =
-      historyEl.scrollHeight;
+        historyEl.scrollHeight;
+});
 
   } catch (error) {
     console.error(
