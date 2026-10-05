@@ -778,6 +778,7 @@ function startWaveMessageRefresh() {
       waveDrawer.dataset.waveId
     ) {
       loadWaveMessageHistory();
+      startWaveMessageRefresh();
     }
   }, 2000);
 }
