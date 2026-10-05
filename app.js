@@ -634,12 +634,12 @@ console.log("DEBUG SEND waveId:", waveId);
     const message =
       waveReplyText.value.trim();
 
-    if (!receiverUUID) {
-      waveReplyResult.textContent =
-        "ERROR // NO SIGNAL SELECTED";
+   if (!waveId) {
+  waveReplyResult.textContent =
+    "ERROR // NO SIGNAL SELECTED";
 
-      return;
-    }
+  return;
+}
 
     if (!message) {
       waveReplyResult.textContent =
