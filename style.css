@@ -1166,41 +1166,34 @@ nav {
   justify-content: center;
 }
 /* =========================================
-   SCAN // LARGE SIGNAL PROFILE IMAGE
+   SCAN PROFILE — LARGE AVATAR ORB
    ========================================= */
 
-#scanProfileOrb {
-  width: 100px;
-  height: 100px;
-  margin: 28px auto 32px;
-  border: 1px solid #25cfff;
-  border-radius: 50%;
-  position: relative;
-  overflow: hidden;
-  display: flex;
-  align-items: center;
-  justify-content: center;
+#scanProfileImage,
+#scanProfileFallback {
+  width: 100px !important;
+  height: 100px !important;
+  min-width: 100px !important;
+  min-height: 100px !important;
+  max-width: 100px !important;
+  max-height: 100px !important;
+
+  border-radius: 50% !important;
+  border: 1px solid #22c8ff;
+
+  margin: 28px auto 22px auto !important;
+
   box-sizing: border-box;
 }
 
 #scanProfileImage {
-  position: absolute;
-  inset: 0;
-  width: 100% !important;
-  height: 100% !important;
-  max-width: none !important;
-  object-fit: cover;
-  object-position: center;
-  border-radius: 50%;
   display: none;
+  object-fit: cover !important;
+  object-position: center !important;
 }
 
 #scanProfileFallback {
-  width: 100%;
-  height: 100%;
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 42px;
-  line-height: 1;
 }
