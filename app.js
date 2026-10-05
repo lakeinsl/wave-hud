@@ -667,19 +667,16 @@ console.log("DEBUG SEND waveId:", waveId);
                 "application/json",
             },
 
-            body: JSON.stringify({
-              sender_uuid:
-                OWNER_UUID,
+           body: JSON.stringify({
+  sender_uuid:
+    OWNER_UUID,
 
-              receiver_uuid:
-                receiverUUID,
+  wave_id:
+    waveId,
 
-              wave_id:
-                waveId,
-
-              message:
-                message,
-            }),
+  message:
+    message,
+}),
           },
         );
 
