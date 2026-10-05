@@ -791,6 +791,8 @@ function stopWaveMessageRefresh() {
 }
 
 function closeWaveConversation() {
+  stopWaveMessageRefresh();
+  
   if (!waveDrawer) return;
 
   waveDrawer.classList.remove("show");
