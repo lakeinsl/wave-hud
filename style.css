@@ -928,3 +928,28 @@ nav {
   text-align: center;
   box-sizing: border-box;
 }
+
+/* ==========================================
+   WAVE ACTIVE SIGNAL — NAME ALIGNMENT
+   ========================================== */
+
+#waveDrawer #waveDrawerName {
+  width: 100%;
+  max-width: 520px;
+
+  margin: 22px auto 0 auto;
+
+  text-align: center;
+  box-sizing: border-box;
+}
+
+#waveDrawer #waveDrawerUsername {
+  width: 100%;
+  max-width: 520px;
+
+  margin-left: auto;
+  margin-right: auto;
+
+  text-align: center;
+  box-sizing: border-box;
+}
