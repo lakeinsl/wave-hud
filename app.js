@@ -399,6 +399,75 @@ row.onclick = () => {
    activityEl.appendChild(row);
 });
 }
+async function loadWaveProfileImage(avatarUUID) {
+  const imageEl =
+    document.getElementById("waveProfileImage");
+
+  const fallbackEl =
+    document.getElementById("waveProfileFallback");
+
+  if (!imageEl || !fallbackEl) {
+    return;
+  }
+
+  // Always reset first so the previous person's
+  // picture never flashes on another profile.
+  imageEl.style.display = "none";
+  imageEl.removeAttribute("src");
+  fallbackEl.style.display = "";
+
+  if (!avatarUUID) {
+    return;
+  }
+
+  try {
+    const response = await fetch(
+      WAVE_PROFILE_API,
+      {
+        method: "POST",
+
+        headers: {
+          "Content-Type": "application/json",
+        },
+
+        body: JSON.stringify({
+          avatar_uuid: avatarUUID,
+        }),
+      },
+    );
+
+    const data = await response.json();
+
+    if (
+      !response.ok ||
+      !data.ok ||
+      !data.has_profile_image ||
+      !data.profile_image_url
+    ) {
+      return;
+    }
+
+    imageEl.onload = () => {
+      fallbackEl.style.display = "none";
+      imageEl.style.display = "block";
+    };
+
+    imageEl.onerror = () => {
+      imageEl.style.display = "none";
+      fallbackEl.style.display = "";
+    };
+
+    imageEl.src = data.profile_image_url;
+  } catch (error) {
+    console.error(
+      "WAVE profile image request failed:",
+      error,
+    );
+
+    imageEl.style.display = "none";
+    fallbackEl.style.display = "";
+  }
+}
 // =========================================
 // WAVE WEB CONVERSATION
 // =========================================
@@ -459,6 +528,8 @@ function openWaveConversation(wave) {
 
   const otherUUID =
     String(wave.other_avatar_uuid || "");
+ 
+  loadWaveProfileImage(otherUUID);
 
 const displayName =
   wave.other_display_name ||
