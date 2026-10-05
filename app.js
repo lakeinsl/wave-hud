@@ -610,9 +610,19 @@ async function loadWaveMessageHistory() {
   const panel =
     document.getElementById("waveDrawer");
 
+  const historyEl =
+    document.getElementById("waveMessageHistory");
+
   if (!panel) {
     console.error(
       "WAVE HISTORY // waveDrawer NOT FOUND"
+    );
+    return;
+  }
+
+  if (!historyEl) {
+    console.error(
+      "WAVE HISTORY // waveMessageHistory NOT FOUND"
     );
     return;
   }
@@ -626,6 +636,12 @@ async function loadWaveMessageHistory() {
     );
     return;
   }
+
+  historyEl.innerHTML = `
+    <div class="noSignals">
+      LOADING MESSAGE HISTORY...
+    </div>
+  `;
 
   console.log(
     "WAVE HISTORY // LOADING:",
@@ -665,20 +681,86 @@ async function loadWaveMessageHistory() {
       data
     );
 
-    console.log(
-      "WAVE HISTORY // MESSAGES:",
-      data.messages
-    );
+    const messages =
+      Array.isArray(data.messages)
+        ? data.messages
+        : [];
 
     panel.dataset.messageCount =
-      String(data.total || 0);
+      String(messages.length);
+
+    historyEl.innerHTML = "";
+
+    if (messages.length === 0) {
+      historyEl.innerHTML = `
+        <div class="noSignals">
+          NO MESSAGES YET // OPEN THE SIGNAL
+        </div>
+      `;
+      return;
+    }
+
+    messages.forEach((message) => {
+      const row =
+        document.createElement("div");
+
+      const senderUUID =
+        String(
+          message.sender_uuid || ""
+        );
+
+      const isMine =
+        senderUUID === OWNER_UUID;
+
+      row.className =
+        isMine
+          ? "waveMessage mine"
+          : "waveMessage theirs";
+
+      const senderLabel =
+        isMine
+          ? "YOU"
+          : (
+              message.sender_display_name ||
+              message.display_name ||
+              "SIGNAL"
+            );
+
+      const messageText =
+        message.message ||
+        message.message_text ||
+        message.body ||
+        "";
+
+      row.innerHTML = `
+        <div class="waveMessageSender">
+          ${escapeHTML(senderLabel)}
+        </div>
+
+        <div class="waveMessageBubble">
+          ${escapeHTML(messageText)}
+        </div>
+      `;
+
+      historyEl.appendChild(row);
+    });
+
+    historyEl.scrollTop =
+      historyEl.scrollHeight;
 
   } catch (error) {
     console.error(
       "WAVE HISTORY // ERROR:",
       error
     );
+
+    historyEl.innerHTML = `
+      <div class="noSignals">
+        NETWORK ERROR // HISTORY UNAVAILABLE
+      </div>
+    `;
   }
+}
 }
 
 function closeWaveConversation() {
