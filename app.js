@@ -364,6 +364,11 @@ const displayName =
   const status =
     String(wave.status || "sent").toUpperCase();
 
+    const waveType =
+  String(wave.wave_type || "wave")
+    .replaceAll("_", " ")
+    .toUpperCase();
+    
   row.innerHTML = `
     <div class="waveNumber">
       ${String(index + 1).padStart(2, "0")}
@@ -371,14 +376,19 @@ const displayName =
 
     <div class="waveOrb">◉</div>
 
-    <div class="waveInfo">
-      <b>${escapeHTML(displayName)}</b>
-      ${
-        username
-          ? `<small>@${escapeHTML(username)}</small>`
-          : ""
-      }
-    </div>
+   <div class="waveInfo">
+  <b>${escapeHTML(displayName)}</b>
+
+  ${
+    username
+      ? `<small>@${escapeHTML(username)}</small>`
+      : ""
+  }
+
+  <span class="waveType">
+    ${escapeHTML(waveType)}
+  </span>
+</div>
 
     <div class="waveDirection">
       <small>
