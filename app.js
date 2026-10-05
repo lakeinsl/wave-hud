@@ -21,6 +21,9 @@ const drawer = document.querySelector("#drawer");
 const totalEl = document.querySelector("#total");
 const radarTotal = document.querySelector(".radar strong");
 
+const scanRangeLabel =
+  document.querySelector("#scanRangeLabel");
+
 const pnEl = document.querySelector("#pn");
 const ptEl = document.querySelector("#pt");
 
@@ -134,7 +137,10 @@ async function loadNearby(showToast = false) {
         data.error || `HTTP ${response.status}`,
       );
     }
-
+if (scanRangeLabel) {
+  scanRangeLabel.textContent =
+    String(data.scan_range ?? 96);
+}
     people = Array.isArray(data.avatars)
       ? data.avatars
       : [];
