@@ -187,9 +187,59 @@ function openP(p) {
 
   // Load this avatar's SL profile picture
   // into the large Signal Profile orb.
-  loadWaveProfileImage(p.avatar_uuid);
+ loadLargeScanProfileImage(p.avatar_uuid);
 }
+aasync function loadLargeScanProfileImage(avatarUuid) {
+  const img = document.getElementById("scanProfileImage");
+  const fallback = document.getElementById("scanProfileFallback");
 
+  if (!img || !fallback || !avatarUuid) return;
+
+  // Reset the big profile orb while loading
+  img.removeAttribute("src");
+  img.style.display = "none";
+  fallback.style.display = "";
+
+  try {
+    const response = await fetch(WAVE_PROFILE_API, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify({
+        avatar_uuid: avatarUuid
+      })
+    });
+
+    const data = await response.json();
+
+    console.log("SCAN PROFILE IMAGE //", data);
+
+    if (
+      response.ok &&
+      data.ok &&
+      data.has_profile_image &&
+      data.profile_image_url
+    ) {
+      img.onload = () => {
+        img.style.display = "block";
+        fallback.style.display = "none";
+      };
+
+      img.onerror = () => {
+        img.style.display = "none";
+        fallback.style.display = "";
+      };
+
+      img.src = data.profile_image_url;
+    }
+  } catch (error) {
+    console.error("SCAN PROFILE IMAGE ERROR:", error);
+
+    img.style.display = "none";
+    fallback.style.display = "";
+  }
+}
 function escapeHTML(value) {
   return String(value ?? "")
     .replaceAll("&", "&amp;")
