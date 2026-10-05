@@ -351,9 +351,9 @@ function drawWaveActivity() {
   const row = document.createElement("div");
   row.className = "waveRow";
 
-  const displayName =
-    wave.other_display_name ||
-    "UNKNOWN SIGNAL";
+const displayName =
+  wave.other_display_name ||
+  "ANONYMOUS WAVE";
 
   const username =
     wave.other_username ||
@@ -458,9 +458,9 @@ function openWaveConversation(wave) {
   const otherUUID =
     String(wave.other_avatar_uuid || "");
 
-  const displayName =
-    wave.other_display_name ||
-    "UNKNOWN SIGNAL";
+const displayName =
+  wave.other_display_name ||
+  "ANONYMOUS WAVE";
 
   const username =
     wave.other_username || "";
