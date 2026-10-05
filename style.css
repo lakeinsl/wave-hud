@@ -968,3 +968,30 @@ nav {
   text-align: center !important;
   box-sizing: border-box !important;
 }
+
+/* ===== WAVE SIGNAL TYPE BADGE ===== */
+
+.waveType {
+  display: inline-flex;
+  align-items: center;
+  width: fit-content;
+  margin-top: 7px;
+  padding: 4px 9px;
+
+  border: 1px solid rgba(84, 223, 255, 0.32);
+  background: rgba(84, 223, 255, 0.07);
+
+  color: #54dfff;
+  font-size: 9px;
+  font-weight: 700;
+  letter-spacing: 2px;
+  line-height: 1;
+
+  text-transform: uppercase;
+}
+
+.waveInfo {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+}
