@@ -72,7 +72,14 @@ function draw() {
           ${String(page * per + i + 1).padStart(2, "0")}
         </span>
 
-        <span class="orb">◉</span>
+        <span class="orb">
+  <img
+    class="scanProfileImage"
+    data-avatar-uuid="${escapeHTML(p.avatar_uuid)}"
+    alt=""
+  >
+  <span class="scanProfileFallback">◉</span>
+</span>
 
         <span>
           <b>${escapeHTML(p.display_name)}</b>
@@ -88,10 +95,84 @@ function draw() {
 
       b.onclick = () => openP(p);
 
-      cards.appendChild(b);
-    });
-}
+      b.onclick = () => openP(p);
 
+cards.appendChild(b);
+
+// Load this nearby avatar's Second Life profile picture.
+const profileImg = b.querySelector(".scanProfileImage");
+const profileFallback = b.querySelector(".scanProfileFallback");
+
+if (profileImg && profileFallback && p.avatar_uuid) {
+  loadScanProfileImage(
+    p.avatar_uuid,
+    profileImg,
+    profileFallback
+  );
+}
+});
+}
+async function loadScanProfileImage(
+  avatarUUID,
+  imageEl,
+  fallbackEl
+) {
+  if (!avatarUUID || !imageEl || !fallbackEl) {
+    return;
+  }
+
+  imageEl.style.display = "none";
+  fallbackEl.style.display = "";
+
+  try {
+    const response = await fetch(
+      WAVE_PROFILE_API,
+      {
+        method: "POST",
+
+        headers: {
+          "Content-Type": "application/json",
+        },
+
+        body: JSON.stringify({
+          avatar_uuid: avatarUUID,
+        }),
+      }
+    );
+
+    const data = await response.json();
+
+    if (
+      !response.ok ||
+      !data.ok ||
+      !data.has_profile_image ||
+      !data.profile_image_url
+    ) {
+      return;
+    }
+
+    imageEl.onload = () => {
+      fallbackEl.style.display = "none";
+      imageEl.style.display = "block";
+    };
+
+    imageEl.onerror = () => {
+      imageEl.style.display = "none";
+      fallbackEl.style.display = "";
+    };
+
+    imageEl.src = data.profile_image_url;
+
+  } catch (error) {
+    console.error(
+      "WAVE scan profile image failed:",
+      error
+    );
+
+    imageEl.style.display = "none";
+    fallbackEl.style.display = "";
+  }
+}
 function openP(p) {
   dnEl.textContent = p.display_name;
   duEl.textContent = p.username || "";
