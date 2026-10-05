@@ -1201,3 +1201,48 @@ nav {
 #scanProfileImage[style*="display: block"] + #scanProfileFallback {
   display: none !important;
 }
+/* =========================================
+   WAVE PROFILE PHOTO — FINAL ORB FIX
+   ========================================= */
+
+#scanProfilePortrait {
+  width: 100px !important;
+  height: 100px !important;
+  min-width: 100px !important;
+  min-height: 100px !important;
+
+  margin: 28px auto 22px auto !important;
+
+  border: none !important;
+  border-radius: 50% !important;
+
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+
+  overflow: hidden !important;
+  background: transparent !important;
+}
+
+#scanProfilePortrait #scanProfileImage {
+  width: 100% !important;
+  height: 100% !important;
+  min-width: 0 !important;
+  min-height: 0 !important;
+  max-width: none !important;
+  max-height: none !important;
+
+  margin: 0 !important;
+  border-radius: 50% !important;
+  border: 1px solid #22c8ff !important;
+
+  object-fit: cover !important;
+  object-position: center !important;
+  box-sizing: border-box !important;
+}
+
+#scanProfilePortrait #scanProfileFallback {
+  width: 100% !important;
+  height: 100% !important;
+  margin: 0 !important;
+}
