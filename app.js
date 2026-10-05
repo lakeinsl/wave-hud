@@ -600,7 +600,7 @@ const displayName =
   panel.classList.add("show");
 
   loadWaveMessageHistory();
-
+startWaveMessageRefresh();
   console.log(
     "WAVE DRAWER OPEN:",
     panel.className
