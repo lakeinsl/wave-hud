@@ -520,6 +520,9 @@ const waveReplyCancel =
 const waveReplyResult =
   document.querySelector("#waveReplyResult");
 
+const waveMessageHistory =
+  document.querySelector("#waveMessageHistory");
+
 
 function openWaveConversation(wave) {
   console.log("OPEN WAVE CONVERSATION:", wave);
