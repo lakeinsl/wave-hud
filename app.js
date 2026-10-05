@@ -679,7 +679,16 @@ async function loadWaveMessageHistory() {
       Array.isArray(data.messages)
         ? data.messages
         : [];
+    
+const previousMessageCount =
+    Number(panel.dataset.messageCount || "-1");
 
+if (
+    previousMessageCount === messages.length &&
+    historyEl.children.length > 0
+) {
+    return;
+}
     panel.dataset.messageCount =
       String(messages.length);
 
