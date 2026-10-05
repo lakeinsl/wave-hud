@@ -184,6 +184,10 @@ function openP(p) {
   resultEl.textContent = "";
 
   drawer.classList.add("show");
+
+  // Load this avatar's SL profile picture
+  // into the large Signal Profile orb.
+  loadWaveProfileImage(p.avatar_uuid);
 }
 
 function escapeHTML(value) {
