@@ -772,13 +772,18 @@ function startWaveMessageRefresh() {
   stopWaveMessageRefresh();
 
   waveMessageRefreshTimer = setInterval(() => {
+    console.log(
+      "LIVE WAVE POLL",
+      waveDrawer?.classList.contains("show"),
+      waveDrawer?.dataset.waveId
+    );
+
     if (
       waveDrawer &&
       waveDrawer.classList.contains("show") &&
       waveDrawer.dataset.waveId
     ) {
       loadWaveMessageHistory();
-      startWaveMessageRefresh();
     }
   }, 2000);
 }
