@@ -1197,3 +1197,7 @@ nav {
   align-items: center;
   justify-content: center;
 }
+/* Hide the old profile orb whenever the real profile image loads */
+#scanProfileImage[style*="display: block"] + #scanProfileFallback {
+  display: none !important;
+}
