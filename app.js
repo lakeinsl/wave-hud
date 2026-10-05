@@ -189,7 +189,7 @@ function openP(p) {
   // into the large Signal Profile orb.
  loadLargeScanProfileImage(p.avatar_uuid);
 }
-aasync function loadLargeScanProfileImage(avatarUuid) {
+async function loadLargeScanProfileImage(avatarUuid) {
   const img = document.getElementById("scanProfileImage");
   const fallback = document.getElementById("scanProfileFallback");
 
