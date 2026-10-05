@@ -637,12 +637,6 @@ async function loadWaveMessageHistory() {
     return;
   }
 
-  historyEl.innerHTML = `
-    <div class="noSignals">
-      LOADING MESSAGE HISTORY...
-    </div>
-  `;
-
   console.log(
     "WAVE HISTORY // LOADING:",
     waveId
