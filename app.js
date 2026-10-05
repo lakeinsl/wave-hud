@@ -762,6 +762,32 @@ async function loadWaveMessageHistory() {
   }
 }
 
+// =========================================
+// LIVE WAVE MESSAGE REFRESH
+// =========================================
+
+let waveMessageRefreshTimer = null;
+
+function startWaveMessageRefresh() {
+  stopWaveMessageRefresh();
+
+  waveMessageRefreshTimer = setInterval(() => {
+    if (
+      waveDrawer &&
+      waveDrawer.classList.contains("show") &&
+      waveDrawer.dataset.waveId
+    ) {
+      loadWaveMessageHistory();
+    }
+  }, 2000);
+}
+
+function stopWaveMessageRefresh() {
+  if (waveMessageRefreshTimer) {
+    clearInterval(waveMessageRefreshTimer);
+    waveMessageRefreshTimer = null;
+  }
+}
 
 function closeWaveConversation() {
   if (!waveDrawer) return;
