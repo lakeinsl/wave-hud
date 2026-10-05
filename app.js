@@ -596,12 +596,87 @@ const displayName =
 
   panel.classList.add("show");
 
+  loadWaveMessageHistory();
+
   console.log(
     "WAVE DRAWER OPEN:",
     panel.className
   );
 }
+async function loadWaveMessageHistory() {
+  const panel =
+    document.getElementById("waveDrawer");
 
+  if (!panel) {
+    console.error(
+      "WAVE HISTORY // waveDrawer NOT FOUND"
+    );
+    return;
+  }
+
+  const waveId =
+    panel.dataset.waveId || "";
+
+  if (!waveId) {
+    console.error(
+      "WAVE HISTORY // NO WAVE ID"
+    );
+    return;
+  }
+
+  console.log(
+    "WAVE HISTORY // LOADING:",
+    waveId
+  );
+
+  try {
+    const response = await fetch(
+      WAVE_MESSAGE_HISTORY_API,
+      {
+        method: "POST",
+
+        headers: {
+          "Content-Type":
+            "application/json",
+        },
+
+        body: JSON.stringify({
+          wave_id: waveId,
+          avatar_uuid: OWNER_UUID,
+        }),
+      }
+    );
+
+    const data =
+      await response.json();
+
+    if (!response.ok || !data.ok) {
+      throw new Error(
+        data.error ||
+        `HTTP ${response.status}`
+      );
+    }
+
+    console.log(
+      "WAVE HISTORY // LOADED:",
+      data
+    );
+
+    console.log(
+      "WAVE HISTORY // MESSAGES:",
+      data.messages
+    );
+
+    panel.dataset.messageCount =
+      String(data.total || 0);
+
+  } catch (error) {
+    console.error(
+      "WAVE HISTORY // ERROR:",
+      error
+    );
+  }
+}
 
 function closeWaveConversation() {
   if (!waveDrawer) return;
