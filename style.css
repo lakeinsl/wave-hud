@@ -829,3 +829,102 @@ nav {
 #waveDrawer .portrait.has-profile-image {
   font-size: 0;
 }
+
+/* ==========================================
+   WAVE ACTIVE SIGNAL — MESSAGE COMPOSER FIX
+   ========================================== */
+
+#waveDrawer {
+  box-sizing: border-box;
+}
+
+#waveDrawer #waveReplyText {
+  display: block;
+  width: 100%;
+  max-width: 520px;
+  height: 90px;
+  min-height: 90px;
+  margin: 24px auto 12px auto;
+  padding: 16px 18px;
+
+  box-sizing: border-box;
+  resize: none;
+
+  background: #061725;
+  border: 1px solid #1da6d8;
+  color: #ffffff;
+
+  font-family: inherit;
+  font-size: 13px;
+  letter-spacing: 1px;
+  line-height: 1.5;
+
+  outline: none;
+}
+
+#waveDrawer #waveReplyText::placeholder {
+  color: #7190a3;
+}
+
+#waveDrawer #waveReplyText:focus {
+  border-color: #46d8ff;
+  box-shadow: 0 0 12px rgba(70, 216, 255, 0.12);
+}
+
+
+/* SEND + CANCEL — SAME WIDTH AND CENTERED */
+
+#waveDrawer #waveReplySend,
+#waveDrawer #waveReplyCancel {
+  display: block;
+
+  width: 100%;
+  max-width: 520px;
+  height: 56px;
+
+  margin-left: auto;
+  margin-right: auto;
+
+  box-sizing: border-box;
+
+  background: #071c2c;
+  border: 1px solid #168fc1;
+  color: #58dcff;
+
+  font-family: inherit;
+  font-size: 15px;
+  letter-spacing: 3px;
+
+  cursor: pointer;
+}
+
+#waveDrawer #waveReplySend {
+  margin-top: 0;
+  margin-bottom: 10px;
+}
+
+#waveDrawer #waveReplyCancel {
+  margin-top: 0;
+}
+
+
+/* BUTTON HOVER */
+
+#waveDrawer #waveReplySend:hover,
+#waveDrawer #waveReplyCancel:hover {
+  background: #0a263a;
+  border-color: #49d9ff;
+}
+
+
+/* RESULT / DELIVERY MESSAGE */
+
+#waveDrawer #waveReplyResult {
+  width: 100%;
+  max-width: 520px;
+
+  margin: 14px auto 0 auto;
+
+  text-align: center;
+  box-sizing: border-box;
+}
