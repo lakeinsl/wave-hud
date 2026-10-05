@@ -995,3 +995,139 @@ nav {
   flex-direction: column;
   align-items: flex-start;
 }
+
+/* =========================================
+   WAVE MESSAGE HISTORY
+   ========================================= */
+
+#waveMessageHistory {
+  width: 100%;
+  max-width: 560px;
+  max-height: 260px;
+
+  margin: 16px auto 18px;
+  padding: 8px 4px 12px;
+
+  overflow-y: auto;
+  overflow-x: hidden;
+
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+
+  scrollbar-width: thin;
+  scrollbar-color: #27d9ff transparent;
+}
+
+
+/* INDIVIDUAL MESSAGE */
+
+.waveMessage {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
+
+/* SENDER LABEL */
+
+.waveMessageSender {
+  margin-bottom: 5px;
+
+  font-size: 9px;
+  font-weight: 700;
+  letter-spacing: 3px;
+
+  color: #65a9c7;
+}
+
+
+/* MESSAGE BUBBLE */
+
+.waveMessageBubble {
+  max-width: 78%;
+  padding: 11px 14px;
+
+  border: 1px solid rgba(39, 217, 255, 0.32);
+
+  background:
+    rgba(6, 25, 37, 0.88);
+
+  color: #eaf9ff;
+
+  font-size: 13px;
+  line-height: 1.45;
+
+  overflow-wrap: anywhere;
+}
+
+
+/* =========================================
+   YOUR MESSAGES
+   ========================================= */
+
+.waveMessage.mine {
+  align-items: flex-end;
+}
+
+.waveMessage.mine .waveMessageSender {
+  text-align: right;
+  color: #27d9ff;
+}
+
+.waveMessage.mine .waveMessageBubble {
+  text-align: left;
+
+  background:
+    rgba(13, 59, 78, 0.82);
+
+  border-color:
+    rgba(39, 217, 255, 0.72);
+
+  box-shadow:
+    0 0 14px rgba(39, 217, 255, 0.06);
+}
+
+
+/* =========================================
+   THEIR MESSAGES
+   ========================================= */
+
+.waveMessage.theirs {
+  align-items: flex-start;
+}
+
+.waveMessage.theirs .waveMessageSender {
+  text-align: left;
+}
+
+.waveMessage.theirs .waveMessageBubble {
+  background:
+    rgba(5, 15, 23, 0.94);
+
+  border-color:
+    rgba(101, 169, 199, 0.28);
+}
+
+
+/* =========================================
+   MESSAGE HISTORY SCROLLBAR
+   ========================================= */
+
+#waveMessageHistory::-webkit-scrollbar {
+  width: 4px;
+}
+
+#waveMessageHistory::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+#waveMessageHistory::-webkit-scrollbar-thumb {
+  background:
+    rgba(39, 217, 255, 0.45);
+}
+
+#waveMessageHistory::-webkit-scrollbar-thumb:hover {
+  background:
+    rgba(39, 217, 255, 0.75);
+}
