@@ -95,8 +95,6 @@ function draw() {
 
       b.onclick = () => openP(p);
 
-      b.onclick = () => openP(p);
-
 cards.appendChild(b);
 
 // Load this nearby avatar's Second Life profile picture.
@@ -187,59 +185,81 @@ function openP(p) {
 
   // Load this avatar's SL profile picture
   // into the large Signal Profile orb.
- loadLargeScanProfileImage(p.avatar_uuid);
+  loadLargeScanProfileImage(p.avatar_uuid);
 }
+
 async function loadLargeScanProfileImage(avatarUuid) {
-  const img = document.getElementById("scanProfileImage");
-  const fallback = document.getElementById("scanProfileFallback");
+  const img =
+    document.getElementById("scanProfileImage");
 
-  if (!img || !fallback || !avatarUuid) return;
+  const fallback =
+    document.getElementById("scanProfileFallback");
 
-  // Reset the big profile orb while loading
+  if (!img || !fallback || !avatarUuid) {
+    return;
+  }
+
+  // Reset previous image first.
+  img.onload = null;
+  img.onerror = null;
   img.removeAttribute("src");
   img.style.display = "none";
   fallback.style.display = "";
 
   try {
-    const response = await fetch(WAVE_PROFILE_API, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json"
-      },
-      body: JSON.stringify({
-        avatar_uuid: avatarUuid
-      })
-    });
+    const response = await fetch(
+      WAVE_PROFILE_API,
+      {
+        method: "POST",
+
+        headers: {
+          "Content-Type": "application/json",
+        },
+
+        body: JSON.stringify({
+          avatar_uuid: avatarUuid,
+        }),
+      }
+    );
 
     const data = await response.json();
 
-    console.log("SCAN PROFILE IMAGE //", data);
+    console.log(
+      "SCAN PROFILE IMAGE //",
+      data
+    );
 
     if (
-      response.ok &&
-      data.ok &&
-      data.has_profile_image &&
-      data.profile_image_url
+      !response.ok ||
+      !data.ok ||
+      !data.has_profile_image ||
+      !data.profile_image_url
     ) {
-      img.onload = () => {
-        img.style.display = "block";
-        fallback.style.display = "none";
-      };
-
-      img.onerror = () => {
-        img.style.display = "none";
-        fallback.style.display = "";
-      };
-
-      img.src = data.profile_image_url;
+      return;
     }
+
+    img.onload = () => {
+      img.style.display = "block";
+      fallback.style.display = "none";
+    };
+
+    img.onerror = () => {
+      img.style.display = "none";
+      fallback.style.display = "";
+    };
+
+    img.src = data.profile_image_url;
   } catch (error) {
-    console.error("SCAN PROFILE IMAGE ERROR:", error);
+    console.error(
+      "SCAN PROFILE IMAGE ERROR:",
+      error
+    );
 
     img.style.display = "none";
     fallback.style.display = "";
   }
 }
+
 function escapeHTML(value) {
   return String(value ?? "")
     .replaceAll("&", "&amp;")
