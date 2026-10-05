@@ -860,6 +860,8 @@ console.log("DEBUG SEND waveId:", waveId);
       waveReplyResult.textContent =
         "MESSAGE SENT // SIGNAL DELIVERING";
 
+      await loadWaveMessageHistory();
+
     } catch (error) {
       console.error(
         "WAVE message send failed:",
