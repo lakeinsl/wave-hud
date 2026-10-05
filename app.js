@@ -409,22 +409,36 @@ document
   .querySelectorAll("nav button")
   .forEach((b) => {
     b.onclick = () => {
+
+      // Close the normal scan/profile drawer.
+      drawer.classList.remove("show");
+
+      // Close an open WAVE conversation.
+      // Also stops the live message polling timer.
+      closeWaveConversation();
+
+      // Update selected navigation button.
       document
         .querySelectorAll("nav button")
         .forEach((q) => q.classList.remove("on"));
 
       b.classList.add("on");
 
+      // Hide all pages.
       document
         .querySelectorAll(".page")
         .forEach((q) => q.classList.remove("active"));
 
-      document
-        .querySelector("#" + b.dataset.p)
-        .classList.add("active");
+      // Open selected page.
+      const targetPage =
+        document.querySelector("#" + b.dataset.p);
 
-      drawer.classList.remove("show");
+      if (targetPage) {
+        targetPage.classList.add("active");
+      }
 
+      // Refresh WAVE activity when returning
+      // to the WAVES page.
       if (b.dataset.p === "waves") {
         loadWaveActivity();
       }
