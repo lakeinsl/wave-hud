@@ -1137,6 +1137,79 @@ if (waveReplyCancel) {
     closeWaveConversation;
 }
 
+const waveDismiss =
+  document.getElementById("waveDismiss");
+
+if (waveDismiss) {
+  waveDismiss.onclick = async () => {
+    const waveId =
+      waveDrawer?.dataset.waveId || "";
+
+    if (!waveId) {
+      waveReplyResult.textContent =
+        "ERROR // NO SIGNAL SELECTED";
+      return;
+    }
+
+    waveDismiss.disabled = true;
+
+    waveReplyResult.textContent =
+      "DISMISSING SIGNAL...";
+
+    try {
+      const response = await fetch(
+        WAVE_DISMISS_API,
+        {
+          method: "POST",
+
+          headers: {
+            "Content-Type": "application/json",
+          },
+
+          body: JSON.stringify({
+            avatar_uuid: OWNER_UUID,
+            wave_id: waveId,
+          }),
+        },
+      );
+
+      const data = await response.json();
+
+      if (!response.ok || !data.ok) {
+        throw new Error(
+          data.error ||
+          `HTTP ${response.status}`,
+        );
+      }
+
+      console.log(
+        "WAVE DISMISS // SUCCESS //",
+        waveId,
+      );
+
+      // Close the conversation and stop
+      // its message polling.
+      closeWaveConversation();
+
+      // Reload activity from Supabase.
+      // The archived Wave should no longer
+      // be returned by wave-activity.
+      await loadWaveActivity();
+
+    } catch (error) {
+      console.error(
+        "WAVE DISMISS // ERROR //",
+        error,
+      );
+
+      waveReplyResult.textContent =
+        "NETWORK ERROR // SIGNAL NOT DISMISSED";
+
+    } finally {
+      waveDismiss.disabled = false;
+    }
+  };
+}
 
 if (waveReplySend) {
   waveReplySend.onclick = async () => {
