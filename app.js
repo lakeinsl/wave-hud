@@ -10,6 +10,9 @@ const WAVE_MESSAGE_SEND_API =
 const WAVE_MESSAGE_HISTORY_API =
   "https://aydjbummeaqibzezjtfq.supabase.co/functions/v1/wave-message-history";
 
+const WAVE_DISMISS_API =
+  "https://aydjbummeaqibzezjtfq.supabase.co/functions/v1/wave-dismiss";
+
 const WAVE_PROFILE_API =
   "https://aydjbummeaqibzezjtfq.supabase.co/functions/v1/wave-profile";
 
