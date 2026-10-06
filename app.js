@@ -1125,40 +1125,67 @@ if (refreshWaves) {
 loadNearby();
 // ============================================================
 // BLKBOX // WAVE
-// MOAP HASH ROUTER
+// MOAP HASH ROUTER V3
+// Designed for Second Life MOAP
 // ============================================================
 
-function routeFromHash() {
-  let page = window.location.hash
+let waveMoapLastHash = "";
+
+function waveMoapRoute() {
+  const hash = window.location.hash
     .replace("#", "")
+    .trim()
     .toLowerCase();
 
-  if (!["wave", "scan", "waves", "more"].includes(page)) {
+  if (!["wave", "scan", "waves", "more"].includes(hash)) {
+    return;
+  }
+
+  // Only process when command changes.
+  if (hash === waveMoapLastHash) {
     return;
   }
 
   const button = document.querySelector(
-    `nav button[data-p="${page}"]`
+    `nav button[data-p="${hash}"]`
   );
 
-  if (button) {
-    button.click();
-
+  if (!button) {
     console.log(
-      "WAVE MOAP // HASH ROUTE //",
-      page.toUpperCase()
+      "WAVE MOAP // BUTTON NOT READY //",
+      hash.toUpperCase()
     );
+    return;
   }
+
+  waveMoapLastHash = hash;
+
+  console.log(
+    "WAVE MOAP // ROUTING //",
+    hash.toUpperCase()
+  );
+
+  button.click();
+
+  console.log(
+    "WAVE MOAP // ROUTED //",
+    hash.toUpperCase()
+  );
 }
 
 
-// Route when page first loads.
-window.addEventListener("load", function () {
-  setTimeout(routeFromHash, 300);
-});
+// Check continuously because Second Life MOAP may update
+// its media URL without firing a normal hashchange event.
+setInterval(waveMoapRoute, 250);
 
 
-// ALSO route whenever an existing MOAP changes hash.
-window.addEventListener("hashchange", function () {
-  routeFromHash();
-});
+// Also check once when the document becomes ready.
+if (document.readyState === "loading") {
+  document.addEventListener(
+    "DOMContentLoaded",
+    waveMoapRoute
+  );
+}
+else {
+  waveMoapRoute();
+}
