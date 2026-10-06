@@ -20,6 +20,8 @@ let people = [];
 let page = 0;
 const per = 8;
 
+let latestScanId = null;
+
 const cards = document.querySelector("#cards");
 const drawer = document.querySelector("#drawer");
 
@@ -312,7 +314,10 @@ async function loadNearby(showToast = false) {
 
     const scan = data.scan;
 
-    if (scanRangeLabel) {
+latestScanId = scan.scan_id || latestScanId;
+
+if (scanRangeLabel) {
+  
       scanRangeLabel.textContent =
         String(scan.scan_range ?? 96);
     }
@@ -363,6 +368,117 @@ async function loadNearby(showToast = false) {
       toast.style.display = "none";
     }, 2500);
   }
+}// ============================================================
+// WAIT FOR A NEW SECOND LIFE SCAN
+// ============================================================
+
+async function waitForFreshScan(previousScanId) {
+  const maxAttempts = 10;
+  const delayMs = 700;
+
+  console.log(
+    "WAVE SCAN // WAITING FOR NEW SCAN AFTER //",
+    previousScanId
+  );
+
+  for (let attempt = 1; attempt <= maxAttempts; attempt++) {
+    try {
+      const response = await fetch(WAVE_API, {
+        method: "POST",
+
+        headers: {
+          "Content-Type": "application/json",
+        },
+
+        body: JSON.stringify({
+          owner_uuid: OWNER_UUID,
+        }),
+      });
+
+      const data = await response.json();
+
+      if (
+        response.ok &&
+        data.ok &&
+        data.scan
+      ) {
+        const scan = data.scan;
+
+        console.log(
+          "WAVE SCAN // POLL",
+          attempt,
+          "//",
+          scan.scan_id
+        );
+
+        // A different scan_id means Second Life
+        // finished uploading the NEW physical scan.
+        if (
+          scan.scan_id &&
+          scan.scan_id !== previousScanId
+        ) {
+          latestScanId = scan.scan_id;
+
+          if (scanRangeLabel) {
+            scanRangeLabel.textContent =
+              String(scan.scan_range ?? 96);
+          }
+
+          people =
+            Array.isArray(scan.avatars)
+              ? scan.avatars
+              : [];
+
+          page = 0;
+
+          draw();
+
+          const toast =
+            document.querySelector("#toast");
+
+          if (toast) {
+            toast.textContent =
+              `SCAN COMPLETE // ${people.length} SIGNAL${
+                people.length === 1 ? "" : "S"
+              }`;
+
+            toast.style.display = "block";
+
+            setTimeout(() => {
+              toast.style.display = "none";
+            }, 1600);
+          }
+
+          console.log(
+            "WAVE SCAN // NEW SCAN LOADED //",
+            latestScanId,
+            "//",
+            people.length,
+            "SIGNALS"
+          );
+
+          return;
+        }
+      }
+    } catch (error) {
+      console.log(
+        "WAVE SCAN // FRESH SCAN POLL ERROR //",
+        error
+      );
+    }
+
+    await new Promise((resolve) =>
+      setTimeout(resolve, delayMs)
+    );
+  }
+
+  console.log(
+    "WAVE SCAN // NEW SCAN TIMEOUT"
+  );
+
+  // Safety refresh so the UI still ends with
+  // whatever scan is newest on the server.
+  loadNearby();
 }
 
 document.querySelector("#x").onclick = () =>
@@ -1205,13 +1321,23 @@ function waveMoapExecuteCommand(command) {
     command
   );
 
-  // Use the website's EXISTING navigation.
-  button.click();
+// Remember which scan was displayed BEFORE
+// this physical SCAN command arrived.
+const previousScanId = latestScanId;
 
-  console.log(
-    "WAVE MOAP // PAGE OPENED //",
-    page.toUpperCase()
-  );
+// Use the website's EXISTING navigation.
+button.click();
+
+console.log(
+  "WAVE MOAP // PAGE OPENED //",
+  page.toUpperCase()
+);
+
+// Physical SCAN reaches MOAP slightly before
+// Second Life finishes uploading the new scan.
+// Keep checking until a different scan_id appears.
+if (command === "OPEN_SCAN") {
+  waitForFreshScan(previousScanId);
 }
 
 
