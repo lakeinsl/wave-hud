@@ -1123,3 +1123,30 @@ if (refreshWaves) {
 
 // Load the latest real Second Life scan when WAVE opens.
 loadNearby();
+// ============================================================
+// BLKBOX // WAVE
+// MOAP PHYSICAL HUD ROUTING
+// ============================================================
+
+function handleMoapRoute() {
+  const params = new URLSearchParams(window.location.search);
+  const page = params.get("page");
+
+  if (!page) return;
+
+  const button = document.querySelector(
+    `nav button[data-p="${page}"]`
+  );
+
+  if (button) {
+    button.click();
+    console.log(
+      "WAVE MOAP // PHYSICAL ROUTE //",
+      page.toUpperCase()
+    );
+  }
+}
+
+window.addEventListener("load", () => {
+  setTimeout(handleMoapRoute, 250);
+});
