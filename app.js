@@ -1341,8 +1341,25 @@ if (command === "OPEN_SCAN") {
   setTimeout(() => loadNearby(), 750);
   setTimeout(() => loadNearby(), 1500);
   setTimeout(() => loadNearby(), 2500);
-  setTimeout(() => loadNearby(), 4000);
-}
+     setTimeout(() => loadNearby(), 4000);
+  }
+
+  // LIVE presence refresh.
+  // Refresh scan data without changing the page/tab.
+  if (command === "REFRESH_SCAN") {
+    console.log(
+      "WAVE MOAP // LIVE SCAN // SILENT REFRESH STARTED"
+    );
+
+    // The LSL scan and Supabase upload may still be finishing,
+    // so check several times just like physical SCAN.
+    loadNearby();
+
+    setTimeout(() => loadNearby(), 750);
+    setTimeout(() => loadNearby(), 1500);
+    setTimeout(() => loadNearby(), 2500);
+    setTimeout(() => loadNearby(), 4000);
+  }
 }
 
 // ------------------------------------------------------------
