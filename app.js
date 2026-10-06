@@ -358,13 +358,14 @@ if (scanRangeLabel) {
       document.querySelector("#toast");
 
     toast.textContent =
-      "NETWORK ERROR // SCAN UNAVAILABLE";
+  "SCAN ERROR // " +
+  (error?.message || String(error));
 
     toast.style.display = "block";
 
     setTimeout(() => {
       toast.style.display = "none";
-    }, 2500);
+    }, 10000);
   }
 }// ============================================================
 // WAIT FOR A NEW SECOND LIFE SCAN
