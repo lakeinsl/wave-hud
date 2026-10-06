@@ -20,7 +20,6 @@ let people = [];
 let page = 0;
 const per = 8;
 
-let latestScanId = null;
 
 const cards = document.querySelector("#cards");
 const drawer = document.querySelector("#drawer");
@@ -314,7 +313,6 @@ async function loadNearby(showToast = false) {
 
     const scan = data.scan;
 
-latestScanId = scan.scan_id || latestScanId;
 
 if (scanRangeLabel) {
   
@@ -1323,9 +1321,6 @@ function waveMoapExecuteCommand(command) {
 
 // Remember which scan was displayed BEFORE
 // this physical SCAN command arrived.
-const previousScanId = latestScanId;
-
-// Use the website's EXISTING navigation.
 button.click();
 
 console.log(
@@ -1333,11 +1328,19 @@ console.log(
   page.toUpperCase()
 );
 
-// Physical SCAN reaches MOAP slightly before
-// Second Life finishes uploading the new scan.
-// Keep checking until a different scan_id appears.
 if (command === "OPEN_SCAN") {
-  waitForFreshScan(previousScanId);
+  console.log(
+    "WAVE MOAP // PHYSICAL SCAN // AUTO REFRESH STARTED"
+  );
+
+  // Refresh immediately, then several more times while
+  // Second Life finishes uploading the new scan.
+  loadNearby();
+
+  setTimeout(() => loadNearby(), 750);
+  setTimeout(() => loadNearby(), 1500);
+  setTimeout(() => loadNearby(), 2500);
+  setTimeout(() => loadNearby(), 4000);
 }
 
 
