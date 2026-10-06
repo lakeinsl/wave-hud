@@ -1343,7 +1343,7 @@ if (command === "OPEN_SCAN") {
   setTimeout(() => loadNearby(), 2500);
   setTimeout(() => loadNearby(), 4000);
 }
-
+}
 
 // ------------------------------------------------------------
 // POLL SUPABASE
