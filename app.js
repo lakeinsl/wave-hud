@@ -1125,77 +1125,40 @@ if (refreshWaves) {
 loadNearby();
 // ============================================================
 // BLKBOX // WAVE
-// MOAP PHYSICAL HUD ROUTING V2
+// MOAP HASH ROUTER
 // ============================================================
 
-function handleMoapRoute() {
-  const params = new URLSearchParams(window.location.search);
+function routeFromHash() {
+  let page = window.location.hash
+    .replace("#", "")
+    .toLowerCase();
 
-  const requestedPage = (
-    params.get("page") || ""
-  ).toLowerCase();
-
-  const allowedPages = [
-    "wave",
-    "scan",
-    "waves",
-    "more"
-  ];
-
-  if (!allowedPages.includes(requestedPage)) {
+  if (!["wave", "scan", "waves", "more"].includes(page)) {
     return;
   }
 
-  let attempts = 0;
-
-  const routeTimer = setInterval(() => {
-    attempts++;
-
-    const button = document.querySelector(
-      `nav button[data-p="${requestedPage}"]`
-    );
-
-    const page = document.getElementById(
-      requestedPage
-    );
-
-    // Wait until the HUD navigation AND page
-    // actually exist and app.js has initialized.
-    if (button && page) {
-      button.click();
-
-      console.log(
-        "WAVE MOAP // ROUTED //",
-        requestedPage.toUpperCase(),
-        "// ATTEMPT",
-        attempts
-      );
-
-      clearInterval(routeTimer);
-      return;
-    }
-
-    // Don't run forever.
-    if (attempts >= 20) {
-      console.log(
-        "WAVE MOAP // ROUTE FAILED //",
-        requestedPage.toUpperCase()
-      );
-
-      clearInterval(routeTimer);
-    }
-
-  }, 250);
-}
-
-
-// Run once DOM exists.
-if (document.readyState === "loading") {
-  document.addEventListener(
-    "DOMContentLoaded",
-    handleMoapRoute
+  const button = document.querySelector(
+    `nav button[data-p="${page}"]`
   );
+
+  if (button) {
+    button.click();
+
+    console.log(
+      "WAVE MOAP // HASH ROUTE //",
+      page.toUpperCase()
+    );
+  }
 }
-else {
-  handleMoapRoute();
-}
+
+
+// Route when page first loads.
+window.addEventListener("load", function () {
+  setTimeout(routeFromHash, 300);
+});
+
+
+// ALSO route whenever an existing MOAP changes hash.
+window.addEventListener("hashchange", function () {
+  routeFromHash();
+});
