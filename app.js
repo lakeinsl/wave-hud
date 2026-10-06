@@ -1096,7 +1096,148 @@ if (
     `;
   }
 }
+// =========================================
+// REFRESH OPEN CONVERSATION IDENTITY
+// =========================================
 
+async function refreshOpenWaveIdentity() {
+  const panel =
+    document.getElementById("waveDrawer");
+
+  if (
+    !panel ||
+    !panel.classList.contains("show")
+  ) {
+    return;
+  }
+
+  const waveId =
+    String(panel.dataset.waveId || "");
+
+  if (!waveId) {
+    return;
+  }
+
+  try {
+    const response = await fetch(
+      WAVE_ACTIVITY_API,
+      {
+        method: "POST",
+
+        headers: {
+          "Content-Type": "application/json",
+        },
+
+        body: JSON.stringify({
+          avatar_uuid: OWNER_UUID,
+        }),
+      }
+    );
+
+    const data = await response.json();
+
+    if (!response.ok || !data.ok) {
+      return;
+    }
+
+    const allWaves = [
+      ...(Array.isArray(data.incoming)
+        ? data.incoming
+        : []),
+
+      ...(Array.isArray(data.sent)
+        ? data.sent
+        : []),
+    ];
+
+    const currentWave =
+      allWaves.find(
+        (wave) =>
+          String(wave.wave_id || "") ===
+          waveId
+      );
+
+    if (!currentWave) {
+      return;
+    }
+
+    const nameEl =
+      document.getElementById(
+        "waveDrawerName"
+      );
+
+    const usernameEl =
+      document.getElementById(
+        "waveDrawerUsername"
+      );
+
+    const statusEl =
+      document.getElementById(
+        "waveDrawerStatus"
+      );
+
+    const displayName =
+      currentWave.other_display_name ||
+      "ANONYMOUS SIGNAL";
+
+    const username =
+      currentWave.other_username || "";
+
+    const otherUUID =
+      String(
+        currentWave.other_avatar_uuid || ""
+      );
+
+    if (nameEl) {
+      nameEl.textContent = displayName;
+    }
+
+    if (usernameEl) {
+      usernameEl.textContent =
+        username
+          ? "@" + username
+          : "";
+    }
+
+    if (statusEl) {
+      statusEl.textContent =
+        currentWave.revealed
+          ? "REVEALED"
+          : String(
+              currentWave.status ||
+              "returned"
+            ).toUpperCase();
+    }
+
+    // If mutual reveal exposed the UUID,
+    // upgrade the open conversation from
+    // anonymous -> identified.
+    if (
+      otherUUID &&
+      panel.dataset.avatarUuid !== otherUUID
+    ) {
+      panel.dataset.avatarUuid =
+        otherUUID;
+
+      loadWaveProfileImage(
+        otherUUID
+      );
+    }
+
+    console.log(
+      "WAVE IDENTITY REFRESH //",
+      displayName,
+      username,
+      currentWave.revealed
+    );
+
+  } catch (error) {
+    console.log(
+      "WAVE IDENTITY REFRESH ERROR //",
+      error
+    );
+  }
+}
 // =========================================
 // LIVE WAVE MESSAGE REFRESH
 // =========================================
@@ -1114,12 +1255,13 @@ function startWaveMessageRefresh() {
     );
 
     if (
-      waveDrawer &&
-      waveDrawer.classList.contains("show") &&
-      waveDrawer.dataset.waveId
-    ) {
-      loadWaveMessageHistory();
-    }
+  waveDrawer &&
+  waveDrawer.classList.contains("show") &&
+  waveDrawer.dataset.waveId
+) {
+  loadWaveMessageHistory();
+  refreshOpenWaveIdentity();
+}
   }, 2000);
 }
 
