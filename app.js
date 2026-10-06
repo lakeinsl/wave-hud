@@ -1,3 +1,4 @@
+alert("WAVE APP V40 LOADED");
 const WAVE_API =
   "https://aydjbummeaqibzezjtfq.supabase.co/functions/v1/wave-scan-poll";
 const WAVE_SEND_API =
