@@ -1125,67 +1125,161 @@ if (refreshWaves) {
 loadNearby();
 // ============================================================
 // BLKBOX // WAVE
-// MOAP HASH ROUTER V3
-// Designed for Second Life MOAP
+// MOAP COMMAND BRIDGE V1
 // ============================================================
 
-let waveMoapLastHash = "";
+const WAVE_MOAP_OWNER =
+  "2274de21-ee93-45e5-bce9-fab2c1fc644e";
 
-function waveMoapRoute() {
-  const hash = window.location.hash
-    .replace("#", "")
-    .trim()
-    .toLowerCase();
+const WAVE_MOAP_POLL_URL =
+  "https://aydjbummeaqibzezjtfq.supabase.co/functions/v1/wave-moap-poll";
 
-  if (!["wave", "scan", "waves", "more"].includes(hash)) {
-    return;
-  }
+let waveMoapLastCommandId = null;
+let waveMoapPolling = false;
 
-  // Only process when command changes.
-  if (hash === waveMoapLastHash) {
+
+// ------------------------------------------------------------
+// ROUTE COMMAND INSIDE EXISTING WEB HUD
+// ------------------------------------------------------------
+
+function waveMoapExecuteCommand(command) {
+  const routes = {
+    OPEN_WAVE: "wave",
+    OPEN_SCAN: "scan",
+    OPEN_WAVES: "waves",
+    OPEN_MORE: "more"
+  };
+
+  const page = routes[command];
+
+  if (!page) {
+    console.log(
+      "WAVE MOAP // UNKNOWN COMMAND //",
+      command
+    );
+
     return;
   }
 
   const button = document.querySelector(
-    `nav button[data-p="${hash}"]`
+    `nav button[data-p="${page}"]`
   );
 
   if (!button) {
     console.log(
-      "WAVE MOAP // BUTTON NOT READY //",
-      hash.toUpperCase()
+      "WAVE MOAP // NAV BUTTON NOT FOUND //",
+      page
     );
+
     return;
   }
 
-  waveMoapLastHash = hash;
-
   console.log(
-    "WAVE MOAP // ROUTING //",
-    hash.toUpperCase()
+    "WAVE MOAP // EXECUTING //",
+    command
   );
 
+  // Use the website's EXISTING navigation.
   button.click();
 
   console.log(
-    "WAVE MOAP // ROUTED //",
-    hash.toUpperCase()
+    "WAVE MOAP // PAGE OPENED //",
+    page.toUpperCase()
   );
 }
 
 
-// Check continuously because Second Life MOAP may update
-// its media URL without firing a normal hashchange event.
-setInterval(waveMoapRoute, 250);
+// ------------------------------------------------------------
+// POLL SUPABASE
+// ------------------------------------------------------------
+
+async function waveMoapPoll() {
+  if (waveMoapPolling) {
+    return;
+  }
+
+  waveMoapPolling = true;
+
+  try {
+    const response = await fetch(
+      WAVE_MOAP_POLL_URL,
+      {
+        method: "POST",
+
+        headers: {
+          "Content-Type": "application/json"
+        },
+
+        body: JSON.stringify({
+          owner_uuid: WAVE_MOAP_OWNER
+        })
+      }
+    );
+
+    if (!response.ok) {
+      console.log(
+        "WAVE MOAP // POLL HTTP ERROR //",
+        response.status
+      );
+
+      return;
+    }
+
+    const result = await response.json();
+
+    if (
+      !result.ok ||
+      !result.command
+    ) {
+      return;
+    }
+
+    const commandId =
+      result.command.command_id;
+
+    const command =
+      result.command.command;
 
 
-// Also check once when the document becomes ready.
-if (document.readyState === "loading") {
-  document.addEventListener(
-    "DOMContentLoaded",
-    waveMoapRoute
-  );
+    // --------------------------------------------------------
+    // IMPORTANT:
+    // Don't repeatedly execute the same stored command.
+    // --------------------------------------------------------
+
+    if (
+      commandId === waveMoapLastCommandId
+    ) {
+      return;
+    }
+
+
+    // Remember FIRST so a slow page action can't duplicate it.
+    waveMoapLastCommandId =
+      commandId;
+
+    waveMoapExecuteCommand(command);
+  }
+  catch (error) {
+    console.log(
+      "WAVE MOAP // POLL ERROR //",
+      error
+    );
+  }
+  finally {
+    waveMoapPolling = false;
+  }
 }
-else {
-  waveMoapRoute();
-}
+
+
+// ------------------------------------------------------------
+// START COMMAND LISTENER
+// ------------------------------------------------------------
+
+// Poll every 1 second.
+setInterval(
+  waveMoapPoll,
+  1000
+);
+
+// Also check immediately.
+waveMoapPoll();
