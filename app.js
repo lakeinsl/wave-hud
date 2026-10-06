@@ -1125,28 +1125,77 @@ if (refreshWaves) {
 loadNearby();
 // ============================================================
 // BLKBOX // WAVE
-// MOAP PHYSICAL HUD ROUTING
+// MOAP PHYSICAL HUD ROUTING V2
 // ============================================================
 
 function handleMoapRoute() {
   const params = new URLSearchParams(window.location.search);
-  const page = params.get("page");
 
-  if (!page) return;
+  const requestedPage = (
+    params.get("page") || ""
+  ).toLowerCase();
 
-  const button = document.querySelector(
-    `nav button[data-p="${page}"]`
-  );
+  const allowedPages = [
+    "wave",
+    "scan",
+    "waves",
+    "more"
+  ];
 
-  if (button) {
-    button.click();
-    console.log(
-      "WAVE MOAP // PHYSICAL ROUTE //",
-      page.toUpperCase()
-    );
+  if (!allowedPages.includes(requestedPage)) {
+    return;
   }
+
+  let attempts = 0;
+
+  const routeTimer = setInterval(() => {
+    attempts++;
+
+    const button = document.querySelector(
+      `nav button[data-p="${requestedPage}"]`
+    );
+
+    const page = document.getElementById(
+      requestedPage
+    );
+
+    // Wait until the HUD navigation AND page
+    // actually exist and app.js has initialized.
+    if (button && page) {
+      button.click();
+
+      console.log(
+        "WAVE MOAP // ROUTED //",
+        requestedPage.toUpperCase(),
+        "// ATTEMPT",
+        attempts
+      );
+
+      clearInterval(routeTimer);
+      return;
+    }
+
+    // Don't run forever.
+    if (attempts >= 20) {
+      console.log(
+        "WAVE MOAP // ROUTE FAILED //",
+        requestedPage.toUpperCase()
+      );
+
+      clearInterval(routeTimer);
+    }
+
+  }, 250);
 }
 
-window.addEventListener("load", () => {
-  setTimeout(handleMoapRoute, 250);
-});
+
+// Run once DOM exists.
+if (document.readyState === "loading") {
+  document.addEventListener(
+    "DOMContentLoaded",
+    handleMoapRoute
+  );
+}
+else {
+  handleMoapRoute();
+}
