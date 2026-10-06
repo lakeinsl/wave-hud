@@ -876,6 +876,7 @@ nav {
 /* SEND + CANCEL — SAME WIDTH AND CENTERED */
 
 #waveDrawer #waveReplySend,
+#waveDrawer #waveDismiss,
 #waveDrawer #waveReplyCancel {
   display: block;
 
@@ -904,6 +905,11 @@ nav {
   margin-bottom: 10px;
 }
 
+#waveDrawer #waveDismiss {
+    margin-top: 0;
+    margin-bottom: 10px;
+}
+
 #waveDrawer #waveReplyCancel {
   margin-top: 0;
 }
@@ -912,6 +918,7 @@ nav {
 /* BUTTON HOVER */
 
 #waveDrawer #waveReplySend:hover,
+#waveDrawer #waveDismiss:hover,
 #waveDrawer #waveReplyCancel:hover {
   background: #0a263a;
   border-color: #49d9ff;
