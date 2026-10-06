@@ -1,5 +1,5 @@
 const WAVE_API =
-  "https://aydjbummeaqibzezjtfq.supabase.co/functions/v1/wave-nearby";
+  "https://aydjbummeaqibzezjtfq.supabase.co/functions/v1/wave-scan-poll";
 const WAVE_SEND_API =
   "https://aydjbummeaqibzezjtfq.supabase.co/functions/v1/wave-send";
 const WAVE_ACTIVITY_API =
@@ -272,7 +272,10 @@ function escapeHTML(value) {
 async function loadNearby(showToast = false) {
   if (showToast) {
     const toast = document.querySelector("#toast");
-    toast.textContent = "REFRESHING PROXIMITY FIELD";
+
+    toast.textContent =
+      "REFRESHING PROXIMITY FIELD";
+
     toast.style.display = "block";
   }
 
@@ -285,32 +288,47 @@ async function loadNearby(showToast = false) {
       },
 
       body: JSON.stringify({
-        hud_id: HUD_ID,
         owner_uuid: OWNER_UUID,
       }),
     });
 
     const data = await response.json();
 
-    if (!response.ok || !data.ok) {
+    console.log(
+      "WAVE SCAN POLL //",
+      data
+    );
+
+    if (
+      !response.ok ||
+      !data.ok ||
+      !data.scan
+    ) {
       throw new Error(
-        data.error || `HTTP ${response.status}`,
+        data.error ||
+        `HTTP ${response.status}`
       );
     }
-if (scanRangeLabel) {
-  scanRangeLabel.textContent =
-    String(data.scan_range ?? 96);
-}
-    people = Array.isArray(data.avatars)
-      ? data.avatars
-      : [];
+
+    const scan = data.scan;
+
+    if (scanRangeLabel) {
+      scanRangeLabel.textContent =
+        String(scan.scan_range ?? 96);
+    }
+
+    people =
+      Array.isArray(scan.avatars)
+        ? scan.avatars
+        : [];
 
     page = 0;
 
     draw();
 
     if (showToast) {
-      const toast = document.querySelector("#toast");
+      const toast =
+        document.querySelector("#toast");
 
       toast.textContent =
         `PROXIMITY FIELD REFRESHED // ${people.length} SIGNAL${
@@ -321,16 +339,24 @@ if (scanRangeLabel) {
         toast.style.display = "none";
       }, 1600);
     }
+
   } catch (error) {
-    console.error("WAVE nearby request failed:", error);
+    console.error(
+      "WAVE scan poll failed:",
+      error
+    );
 
     people = [];
     page = 0;
+
     draw();
 
-    const toast = document.querySelector("#toast");
+    const toast =
+      document.querySelector("#toast");
 
-    toast.textContent = "NETWORK ERROR // SCAN UNAVAILABLE";
+    toast.textContent =
+      "NETWORK ERROR // SCAN UNAVAILABLE";
+
     toast.style.display = "block";
 
     setTimeout(() => {
